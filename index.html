@@ -429,10 +429,13 @@ const LS_PWD        = 'tl_pwd';
 const SS_ADMIN      = 'tl_admin_session';
 
 // ▼▼▼ ЗАШИТЫЕ ДАННЫЕ — менять только здесь ▼▼▼
-const HARD_KEY    = '$2a$10$MD7CFgyBrv5xr9otmlv/HefViokFkVbS5D6IaCGGp8T2Df6PTV1b.';
-const HARD_BIN    = '6a06eb57250b1311c3535e2f'; // ← вставь сюда свой BIN ID
-const HARD_CLOUD  = 'do7yxqdcr';
-const HARD_PRESET = 'taplink';
+// HARD_ACCESS_KEY = X-Access-Key (не Master!), только для записи.
+// Bin должен быть PUBLIC — тогда чтение идёт без ключа вообще.
+// Master Key НЕ хранится в коде — только у тебя локально.
+const HARD_ACCESS_KEY = '$2a$10$MD7CFgyBrv5xr9otmlv/HefViokFkVbS5D6IaCGGp8T2Df6PTV1b.'; // X-Access-Key из JSONBin → API Keys → TAPLINK
+const HARD_BIN        = '6a06f932c0954111d828dbdc';     // из JSONBin → Bins → открой свой bin → ID в URL
+const HARD_CLOUD      = 'do7yxqdcr';
+const HARD_PRESET     = 'taplink';
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 const JSONBIN = 'https://api.jsonbin.io/v3';
@@ -504,19 +507,21 @@ function dataURLtoFile(dataurl, filename) {
 
 /* ====================== JSONBIN ====================== */
 async function binGet(){
+  // Bin публичный — читаем без ключа
   const r = await fetch(`${JSONBIN}/b/${HARD_BIN}/latest`, {
-    headers: {'X-Master-Key': HARD_KEY, 'X-Bin-Meta': 'false'}
+    headers: {'X-Bin-Meta': 'false'}
   });
   if(!r.ok) throw new Error('JSONBin error ' + r.status);
   return await r.json();
 }
 
 async function binSet(data){
+  // Запись через Access Key (не Master)
   const body = JSON.stringify(data);
   if (body.length > 480000) throw new Error('Данные слишком большие. Убери пару фото из галереи.');
   const r = await fetch(`${JSONBIN}/b/${HARD_BIN}`, {
     method: 'PUT',
-    headers: {'Content-Type':'application/json','X-Master-Key': HARD_KEY},
+    headers: {'Content-Type':'application/json','X-Access-Key': HARD_ACCESS_KEY},
     body
   });
   if(!r.ok) throw new Error('Ошибка сохранения: ' + r.status);
