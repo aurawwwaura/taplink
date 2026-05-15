@@ -160,8 +160,10 @@ textarea.inp{resize:vertical;min-height:64px}
 .lgn-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
 .lgn-err{color:#ff5f5f;font-size:13px;margin-top:8px;min-height:16px}
 
-.ipreview{width:100%;height:72px;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border);display:none}
-.ipreview.sq{height:48px;width:48px;border-radius:50%}
+.ipreview{width:100%;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border);display:none}
+.ipreview.sq{width:72px;height:72px;border-radius:50%}
+.ipreview.banner{width:100%;aspect-ratio:4/5;max-height:320px;border-radius:0}
+.ipreview.featured{width:100%;aspect-ratio:16/9;border-radius:var(--r)}
 
 .soc-list{display:flex;flex-direction:column;gap:7px}
 .soc-row{display:grid;grid-template-columns:36px 1fr 1fr;gap:7px;align-items:center}
@@ -200,6 +202,9 @@ textarea.inp{resize:vertical;min-height:64px}
 .crop-btn.cancel{background:var(--bg3);color:var(--text2)}
 .crop-btn.confirm{background:var(--accent);color:#fff}
 .crop-hint{font-size:12px;color:var(--text3);margin-top:8px;text-align:center}
+
+.admin-fab{position:fixed;bottom:24px;right:18px;z-index:200;width:44px;height:44px;border-radius:50%;background:rgba(88,101,242,.85);border:1px solid rgba(88,101,242,.6);backdrop-filter:blur(8px);color:#fff;font-size:20px;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px rgba(88,101,242,.4);transition:transform .15s,opacity .15s}
+.admin-fab:hover{transform:scale(1.1);opacity:1}
 
 @media(max-width:400px){
   .btn-grid{grid-template-columns:1fr}
@@ -330,13 +335,13 @@ textarea.inp{resize:vertical;min-height:64px}
     <div style="height:14px"></div>
     <div class="fl">
       <label class="lbl">Аватарка <span class="hint">— 400×400 px, JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить аватарку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-av-prev','d_avatar',200,true,1)"></label>
-      <img class="ipreview sq" id="a-av-prev" style="height:52px;width:52px;border-radius:50%;margin-top:8px">
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить аватарку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-av-prev','d_avatar',400,true,1)"></label>
+      <img class="ipreview sq" id="a-av-prev" style="margin-top:8px">
     </div>
     <div class="fl">
       <label class="lbl">Баннер (шапка) <span class="hint">— 1080×1350 px (4:5), JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-bn-prev','d_banner',900,false,0.75)"></label>
-      <img class="ipreview" id="a-bn-prev">
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-bn-prev','d_banner',1200,false,0.75)"></label>
+      <img class="ipreview banner" id="a-bn-prev">
     </div>
   </div>
 
@@ -357,8 +362,8 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="fl"><label class="lbl">Ссылка</label><input class="inp" id="a-feat-url" placeholder="https://"></div>
     <div class="fl">
       <label class="lbl">Обложка карточки <span class="hint">— 900×500 px (16:9), JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить обложку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-feat-prev','d_featured',800,false,1.78)"></label>
-      <img class="ipreview" id="a-feat-prev">
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить обложку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-feat-prev','d_featured',1200,false,1.78)"></label>
+      <img class="ipreview featured" id="a-feat-prev">
     </div>
   </div>
 
@@ -431,6 +436,7 @@ textarea.inp{resize:vertical;min-height:64px}
 </div>
 
 <div class="lightbox" id="lb" onclick="closeLb()"><button class="lb-close">✕</button><img id="lb-img" src="" alt=""></div>
+<button class="admin-fab" id="admin-fab" title="Открыть настройки" onclick="showPage('adm');loadAdm()">⚙️</button>
 <div class="toast" id="toast"></div>
 <input type="file" accept="image/*" id="gal-fi" style="display:none" onchange="handleGalPhoto(this)">
 
@@ -441,6 +447,7 @@ const LS_BIN        = 'tl_bin';
 const LS_PWD        = 'tl_pwd';
 const LS_CLOUD_NAME = 'tl_cloud_name';
 const LS_PRESET     = 'tl_preset';
+const SS_ADMIN      = 'tl_admin_session'; // sessionStorage: авторизован в этой вкладке
 
 const JSONBIN = 'https://api.jsonbin.io/v3';
 
@@ -460,7 +467,14 @@ const DEF = {
 function $(id){ return document.getElementById(id); }
 function showEl(id){ $(id).style.display='block'; }
 function hideEl(id){ $(id).style.display='none'; }
-function showPage(id){ ['pub','lgn','adm','setup'].forEach(x=>hideEl(x)); showEl(id); }
+function showPage(id){
+  ['pub','lgn','adm','setup'].forEach(x=>hideEl(x));
+  const el = $(id);
+  // lgn и setup должны быть flex для центрирования
+  el.style.display = (id==='lgn'||id==='setup') ? 'flex' : 'block';
+  // скрываем FAB если ушли со страницы pub
+  if(id !== 'pub') $('admin-fab').style.display='none';
+}
 
 function showToast(msg, err=false){
   const t=$('toast'); t.textContent=msg;
@@ -598,10 +612,16 @@ async function init(){
     spinner(false);
 
     if(location.search.includes('admin')){
-      showPage('lgn');
-      $('pwd').focus();
+      if(sessionStorage.getItem(SS_ADMIN)){
+        showPage('adm');
+        loadAdm();
+      } else {
+        showPage('lgn');
+        $('pwd').focus();
+      }
     } else {
       showPage('pub');
+      if(sessionStorage.getItem(SS_ADMIN)) $('admin-fab').style.display='flex';
     }
   } catch(e){
     spinner(false);
@@ -618,13 +638,14 @@ function login(){
   $('lgn-err').textContent='';
   const stored = localStorage.getItem(LS_PWD);
   if(btoa(val) === stored){
+    sessionStorage.setItem(SS_ADMIN, '1');
     showPage('adm');
     loadAdm();
   } else {
     $('lgn-err').textContent='Неверный пароль';
   }
 }
-function showPub(){ renderPub(); showPage('pub'); }
+function showPub(){ renderPub(); showPage('pub'); if(sessionStorage.getItem(SS_ADMIN)) $('admin-fab').style.display='flex'; }
 
 /* ====================== CROPPER ====================== */
 let _cropState = null;
@@ -782,7 +803,7 @@ async function confirmCrop(){
 async function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
   if(!inp.files[0]) return;
   const file = inp.files[0];
-  const q = (key === 'd_banner') ? 0.72 : 0.82;
+  const q = (key === 'd_banner') ? 0.93 : 0.95;
   const title = (key==='d_avatar') ? 'Crop avatar' : (key==='d_banner') ? 'Crop banner' : 'Crop image';
 
   openCropper(file, {
