@@ -27,8 +27,8 @@ body{overflow-x:hidden}
 
 .profile{text-align:center;padding:0 20px;margin-top:-24px;position:relative;z-index:2}
 .profile-avatar-wrap{display:inline-block;margin-bottom:10px}
-.profile-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--bg);display:block;background:var(--bg3)}
-.profile-avatar-ph{width:72px;height:72px;border-radius:50%;background:var(--bg3);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--text2)}
+.profile-avatar{width:144px;height:144px;border-radius:50%;object-fit:cover;border:3px solid var(--bg);display:block;background:var(--bg3)}
+.profile-avatar-ph{width:144px;height:144px;border-radius:50%;background:var(--bg3);border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:var(--text2)}
 .profile-name{font-size:22px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:2px}
 .profile-name .badge{width:20px;height:20px;background:#1d9bf0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
 .profile-name .badge svg{width:11px;height:11px;fill:white}
@@ -161,7 +161,7 @@ textarea.inp{resize:vertical;min-height:64px}
 .lgn-err{color:#ff5f5f;font-size:13px;margin-top:8px;min-height:16px}
 
 .ipreview{width:100%;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border);display:none}
-.ipreview.sq{width:72px;height:72px;border-radius:50%}
+.ipreview.sq{width:144px;height:144px;border-radius:50%}
 .ipreview.banner{width:100%;aspect-ratio:4/5;max-height:320px;border-radius:0}
 .ipreview.featured{width:100%;aspect-ratio:16/9;border-radius:var(--r)}
 
@@ -221,33 +221,16 @@ textarea.inp{resize:vertical;min-height:64px}
 <!-- ═══════ SETUP ═══════ -->
 <div id="setup" style="display:none">
   <div class="setup-box">
-    <h2>⚙️ Первичная настройка</h2>
-    <p>Для хранения данных нужен бесплатный аккаунт <strong>JSONBin.io</strong> + Cloudinary (для фото и видео).</p>
-    <div class="info-banner">📌 Всё будет храниться в облаке. Страница будет работать 24/7 с любого устройства.</div>
-    
+    <h2>🔐 Установить пароль</h2>
+    <p>Установи пароль для входа в админку. Он сохранится в облаке — будет работать с любого устройства.</p>
     <div class="setup-step">
-      <div class="setup-step-num">Шаг 1</div>
-      <p>JSONBin API Key (уже есть у тебя):</p>
-      <input class="inp" id="setup-key" value="$2a$10$NMKPMN9atLj7ZIWBVO1k1.jTUpwBalTjlS7BeZN4256.Seqy1wfky" placeholder="$2a$10$...">
-    </div>
-    <div class="setup-step">
-      <div class="setup-step-num">Шаг 2</div>
-      <p>Cloudinary Cloud Name (твой аккаунт):</p>
-      <input class="inp" id="setup-cloud" placeholder="Например: taplink или dabc123" value="taplink">
-    </div>
-    <div class="setup-step">
-      <div class="setup-step-num">Шаг 3</div>
-      <p>Cloudinary Upload Preset (уже создан):</p>
-      <input class="inp" id="setup-preset" value="taplink" placeholder="taplink">
-    </div>
-    <div class="setup-step">
-      <div class="setup-step-num">Шаг 4</div>
-      <p>Пароль для админки (минимум 6 символов):</p>
-      <input type="password" class="inp" id="setup-pwd" placeholder="Минимум 6 символов">
+      <div class="setup-step-num">Пароль</div>
+      <p>Минимум 6 символов</p>
+      <input type="password" class="inp" id="setup-pwd" placeholder="Придумай пароль">
     </div>
     <div class="lgn-err" id="setup-err"></div>
     <div style="height:10px"></div>
-    <button class="save-btn" id="setup-btn" onclick="doSetup()">🚀 Создать / обновить страницу</button>
+    <button class="save-btn" id="setup-btn" onclick="doSetup()">🚀 Сохранить пароль</button>
   </div>
 </div>
 
@@ -442,12 +425,15 @@ textarea.inp{resize:vertical;min-height:64px}
 
 <script>
 /* ====================== НАСТРОЙКИ ====================== */
-const LS_KEY        = 'tl_key';
-const LS_BIN        = 'tl_bin';
 const LS_PWD        = 'tl_pwd';
-const LS_CLOUD_NAME = 'tl_cloud_name';
-const LS_PRESET     = 'tl_preset';
-const SS_ADMIN      = 'tl_admin_session'; // sessionStorage: авторизован в этой вкладке
+const SS_ADMIN      = 'tl_admin_session';
+
+// ▼▼▼ ЗАШИТЫЕ ДАННЫЕ — менять только здесь ▼▼▼
+const HARD_KEY    = '$2a$10$NMKPMN9atLj7ZIWBVO1k1.jTUpwBalTjlS7BeZN4256.Seqy1wfky';
+const HARD_BIN    = '6a06aae5c0954111d8271423'; // ← вставь сюда свой BIN ID
+const HARD_CLOUD  = 'taplink';
+const HARD_PRESET = 'taplink';
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 const JSONBIN = 'https://api.jsonbin.io/v3';
 
@@ -487,10 +473,6 @@ function spinner(on){ $('spinner').classList.toggle('hidden', !on); }
 
 /* ====================== CLOUDINARY ====================== */
 async function uploadToCloudinary(fileOrDataUrl, resourceType = 'image') {
-  const cloudName = localStorage.getItem(LS_CLOUD_NAME);
-  const preset    = localStorage.getItem(LS_PRESET);
-  if (!cloudName || !preset) throw new Error('Cloudinary не настроен. Вернитесь в Setup.');
-
   let file;
   if (typeof fileOrDataUrl === 'string' && fileOrDataUrl.startsWith('data:')) {
     file = dataURLtoFile(fileOrDataUrl, 'cropped.jpg');
@@ -500,16 +482,16 @@ async function uploadToCloudinary(fileOrDataUrl, resourceType = 'image') {
 
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('upload_preset', preset);
+  formData.append('upload_preset', HARD_PRESET);
 
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${HARD_CLOUD}/${resourceType}/upload`, {
     method: 'POST',
     body: formData
   });
 
   if (!res.ok) throw new Error('Cloudinary error: ' + res.status);
   const data = await res.json();
-  return data.secure_url; // надёжная HTTPS ссылка
+  return data.secure_url;
 }
 
 function dataURLtoFile(dataurl, filename) {
@@ -522,89 +504,65 @@ function dataURLtoFile(dataurl, filename) {
 
 /* ====================== JSONBIN ====================== */
 async function binGet(){
-  const key = localStorage.getItem(LS_KEY);
-  const bin = localStorage.getItem(LS_BIN);
-  if(!key || !bin) return null;
-  const r = await fetch(`${JSONBIN}/b/${bin}/latest`, {
-    headers: {'X-Master-Key': key, 'X-Bin-Meta': 'false'}
+  const r = await fetch(`${JSONBIN}/b/${HARD_BIN}/latest`, {
+    headers: {'X-Master-Key': HARD_KEY, 'X-Bin-Meta': 'false'}
   });
   if(!r.ok) throw new Error('JSONBin error ' + r.status);
   return await r.json();
 }
 
 async function binSet(data){
-  const key = localStorage.getItem(LS_KEY);
-  const bin = localStorage.getItem(LS_BIN);
   const body = JSON.stringify(data);
   if (body.length > 480000) throw new Error('Данные слишком большие. Убери пару фото из галереи.');
-  const r = await fetch(`${JSONBIN}/b/${bin}`, {
+  const r = await fetch(`${JSONBIN}/b/${HARD_BIN}`, {
     method: 'PUT',
-    headers: {'Content-Type':'application/json','X-Master-Key':key},
+    headers: {'Content-Type':'application/json','X-Master-Key': HARD_KEY},
     body
   });
   if(!r.ok) throw new Error('Ошибка сохранения: ' + r.status);
   return await r.json();
 }
 
-async function binCreate(key, initialData){
-  const r = await fetch(`${JSONBIN}/b`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'taplink','X-Bin-Private':'true'},
-    body: JSON.stringify(initialData)
-  });
-  if(!r.ok) throw new Error('Не удалось создать bin');
-  const d = await r.json();
-  return d.metadata.id;
-}
 
 /* ====================== SETUP ====================== */
 async function doSetup(){
-  const key    = $('setup-key').value.trim();
-  const cloud  = $('setup-cloud').value.trim().toLowerCase();
-  const preset = $('setup-preset').value.trim();
   const pwd    = $('setup-pwd').value.trim();
   const errEl  = $('setup-err');
 
   errEl.textContent = '';
-  if(!key || !cloud || !preset) return errEl.textContent = 'Заполните все поля';
   if(pwd.length < 6) return errEl.textContent = 'Пароль минимум 6 символов';
 
   const btn = $('setup-btn');
   btn.disabled = true;
-  btn.textContent = 'Создаём...';
+  btn.textContent = 'Сохраняем...';
 
   try{
-    let binId = localStorage.getItem(LS_BIN);
-    if(!binId) binId = await binCreate(key, DEF);
-
-    localStorage.setItem(LS_KEY, key);
-    localStorage.setItem(LS_BIN, binId);
-    localStorage.setItem(LS_CLOUD_NAME, cloud);
-    localStorage.setItem(LS_PRESET, preset);
-    localStorage.setItem(LS_PWD, btoa(pwd));
-
-    C = Object.assign({}, DEF);
-    showToast('✓ Всё готово! Страница создана');
-    setTimeout(()=>{ renderPub(); showPage('pub'); }, 600);
+    const hash = btoa(pwd);
+    localStorage.setItem(LS_PWD, hash);
+    // Сохраняем пароль в JSONBin чтобы работал с любого устройства
+    const existing = await binGet().catch(()=>null);
+    C = Object.assign({}, DEF, existing || {}, {pwd_hash: hash});
+    await binSet(C);
+    showToast('✓ Пароль установлен!');
+    sessionStorage.setItem(SS_ADMIN, '1');
+    setTimeout(()=>{ renderPub(); showPage('pub'); $('admin-fab').style.display='flex'; }, 600);
   } catch(e){
     errEl.textContent = e.message;
     btn.disabled = false;
-    btn.textContent = '🚀 Создать / обновить страницу';
+    btn.textContent = '🚀 Сохранить пароль';
   }
 }
 
 /* ====================== INIT ====================== */
 async function init(){
-  spinner(true);
-  const key = localStorage.getItem(LS_KEY);
-  const bin = localStorage.getItem(LS_BIN);
-
-  if(!key || !bin){
+  // Setup доступен только по ?setup (только для тебя)
+  if(location.search.includes('setup')){
     spinner(false);
     showPage('setup');
     return;
   }
 
+  spinner(true);
   try{
     const data = await binGet();
     C = Object.assign({}, DEF, data);
@@ -627,17 +585,22 @@ async function init(){
     spinner(false);
     showToast('⚠️ Ошибка загрузки', true);
     C = Object.assign({}, DEF);
-    renderPub(); 
+    renderPub();
     showPage('pub');
   }
 }
 
+// Дефолтный пароль (задаётся через Setup или меняется в админке)
+// Хранится в localStorage после первого входа.
+// Если localStorage пуст — проверяем по паролю из JSONBin (поле pwd_hash)
 /* ====================== AUTH ====================== */
 function login(){
   const val = $('pwd').value;
   $('lgn-err').textContent='';
-  const stored = localStorage.getItem(LS_PWD);
-  if(btoa(val) === stored){
+  const stored = localStorage.getItem(LS_PWD) || (C && C.pwd_hash) || null;
+  if(stored && btoa(val) === stored){
+    // сохраняем на этом устройстве чтобы в следующий раз не смотреть в C
+    localStorage.setItem(LS_PWD, stored);
     sessionStorage.setItem(SS_ADMIN, '1');
     showPage('adm');
     loadAdm();
@@ -867,9 +830,10 @@ function renderAdmGridCards(){
           <label class="lbl">Фото</label>
           <label class="upbtn" style="height:36px">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>
-            ${gc.img_data?'✓ Загружено':'Загрузить фото'}
+            ${gc.img_data?'✓ Изменить фото':'Загрузить фото'}
             <input type="file" accept="image/*" style="display:none" data-gci="${i}" onchange="loadGCImg(this)">
           </label>
+          ${gc.img_data ? `<img src="${gc.img_data}" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px;margin-top:7px;border:1px solid var(--border)">` : ''}
         </div>
       </div>`;
     c.appendChild(d);
@@ -999,6 +963,18 @@ async function handleGalPhoto(inp){
 function renderPub(){
   document.title = C.tabTitle || 'My Link';
 
+  // OG meta tags
+  function setMeta(prop, content){
+    let el = document.querySelector(`meta[property="${prop}"]`);
+    if(!el){ el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
+    el.setAttribute('content', content);
+  }
+  setMeta('og:title', C.name || C.tabTitle || 'My Link');
+  setMeta('og:description', C.bio || '');
+  if(C.d_banner) setMeta('og:image', C.d_banner);
+  else if(C.d_avatar) setMeta('og:image', C.d_avatar);
+  setMeta('og:type', 'website');
+
   // hero
   const hi = $('hero-img'), hp = $('hero-ph');
   if(C.d_banner){ hi.src = C.d_banner; hi.style.display='block'; hp.style.display='none'; }
@@ -1043,7 +1019,7 @@ function renderPub(){
   const pg = $('pub-grid'); pg.innerHTML = '';
   (C.gridCards||[]).slice(0,4).forEach(gc=>{
     const a = document.createElement('a'); a.className='grid-card'; a.href=gc.url||'#'; a.target='_blank'; a.rel='noopener';
-    let inner = gc.img_data ? `<img src="${gc.img_data}" alt="">` : `<div class="grid-card-ph">Нет фото</div>`;
+    let inner = gc.img_data ? `<img src="${gc.img_data}" alt="" loading="lazy">` : `<div class="grid-card-ph">Нет фото</div>`;
     if(gc.label) inner += `<div class="grid-card-label">${gc.label}</div>`;
     a.innerHTML = inner; pg.appendChild(a);
   });
@@ -1075,7 +1051,7 @@ function renderPub(){
     const gg = $('pub-gallery'); gg.innerHTML = '';
     C.gallery.forEach((src,i)=>{
       const d = document.createElement('div'); d.className='gal-item';
-      d.innerHTML = `<img src="${src}" alt="photo ${i+1}">`;
+      d.innerHTML = `<img src="${src}" alt="photo ${i+1}" loading="lazy">`;
       d.onclick = () => openLb(src);
       gg.appendChild(d);
     });
@@ -1129,7 +1105,12 @@ async function saveAll(){
   C.galOn = $('a-gal-on').checked;
 
   const np = $('a-pwd').value.trim();
-  if(np){ localStorage.setItem(LS_PWD, btoa(np)); $('a-pwd').value = ''; }
+  if(np){
+    const hash = btoa(np);
+    localStorage.setItem(LS_PWD, hash);
+    C.pwd_hash = hash;
+    $('a-pwd').value = '';
+  }
 
   const btn = $('save-btn');
   btn.disabled = true;
