@@ -78,7 +78,7 @@ body{overflow-x:hidden}
 .gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .gal-item:hover img{transform:scale(1.05)}
 
-.pub-footer{text-align:center;padding:20px 14px;border-top:1px solid var(--border)}
+.pub-footer{text-align:center;padding:4px 14px}
 .pub-footer a{color:var(--text3);font-size:12px;text-decoration:none;margin:0 8px}
 .pub-footer a:hover{color:var(--text2)}
 
@@ -183,6 +183,24 @@ textarea.inp{resize:vertical;min-height:64px}
 .setup-step code{background:var(--bg);padding:2px 6px;border-radius:4px;font-size:12px;color:#e2e8f0;font-family:monospace}
 .info-banner{background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.25);border-radius:10px;padding:12px 14px;font-size:13px;color:#a5aaff;margin-bottom:16px;line-height:1.5}
 
+/* ═══════ CROPPER MODAL ═══════ */
+.crop-modal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.96);flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.crop-modal.open{display:flex}
+.crop-wrap{position:relative;overflow:hidden;border-radius:12px;background:#111;touch-action:none;cursor:grab;user-select:none}
+.crop-wrap.grabbing{cursor:grabbing}
+.crop-img{position:absolute;transform-origin:0 0;pointer-events:none;display:block}
+.crop-overlay{position:absolute;inset:0;pointer-events:none}
+.crop-circle-mask{position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:50%}
+.crop-rect-mask{position:absolute;inset:0;box-shadow:0 0 0 9999px rgba(0,0,0,.6);border-radius:4px}
+.crop-controls{margin-top:14px;display:flex;align-items:center;gap:12px;width:100%;max-width:340px}
+.crop-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border2);outline:none}
+.crop-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer}
+.crop-btns{display:flex;gap:8px;margin-top:12px}
+.crop-btn{padding:10px 22px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+.crop-btn.cancel{background:var(--bg3);color:var(--text2)}
+.crop-btn.confirm{background:var(--accent);color:#fff}
+.crop-hint{font-size:12px;color:var(--text3);margin-top:8px;text-align:center}
+
 @media(max-width:400px){
   .btn-grid{grid-template-columns:1fr}
   .btn-grid .fw{grid-column:1}
@@ -270,13 +288,12 @@ textarea.inp{resize:vertical;min-height:64px}
 <div id="lgn" style="display:none">
   <div class="lgn-box">
     <div class="lgn-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-    <div class="lgn-title">Панель управления</div>
-    <div class="lgn-sub">Введите пароль</div>
-    <input type="password" class="inp" id="pwd" placeholder="Пароль…" onkeydown="if(event.key==='Enter')login()">
+    <div class="lgn-title">Admin Panel</div>
+    <div class="lgn-sub">Enter your password to continue</div>
+    <input type="password" class="inp" id="pwd" placeholder="Password…" onkeydown="if(event.key==='Enter')login()">
     <div class="lgn-err" id="lgn-err"></div>
     <div style="height:10px"></div>
-    <button class="save-btn" onclick="login()">Войти</button>
-    <div style="margin-top:12px;font-size:12px;color:var(--text3)">Забыли пароль? Откройте <code style="background:var(--bg3);padding:2px 5px;border-radius:4px">localStorage</code> в DevTools и удалите ключ <code style="background:var(--bg3);padding:2px 5px;border-radius:4px">tl_pwd</code></div>
+    <button class="save-btn" onclick="login()">Sign In</button>
   </div>
 </div>
 
@@ -305,12 +322,12 @@ textarea.inp{resize:vertical;min-height:64px}
     <div style="height:14px"></div>
     <div class="fl">
       <label class="lbl">Аватарка <span class="hint">— 400×400 px, JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить аватарку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-av-prev','d_avatar',200)"></label>
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить аватарку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-av-prev','d_avatar',200,true,1)"></label>
       <img class="ipreview sq" id="a-av-prev" style="height:52px;width:52px;border-radius:50%;margin-top:8px">
     </div>
     <div class="fl">
       <label class="lbl">Баннер (шапка) <span class="hint">— 1080×1350 px (4:5), JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-bn-prev','d_banner',1200)"></label>
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-bn-prev','d_banner',900,false,0.75)"></label>
       <img class="ipreview" id="a-bn-prev">
     </div>
   </div>
@@ -330,7 +347,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="fl"><label class="lbl">Ссылка</label><input class="inp" id="a-feat-url" placeholder="https://"></div>
     <div class="fl">
       <label class="lbl">Обложка карточки <span class="hint">— 900×500 px (16:9), JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить обложку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-feat-prev','d_featured',900)"></label>
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить обложку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-feat-prev','d_featured',800,false,1.78)"></label>
       <img class="ipreview" id="a-feat-prev">
     </div>
   </div>
@@ -372,6 +389,27 @@ textarea.inp{resize:vertical;min-height:64px}
   </div>
 
   <button class="save-btn" id="save-btn" onclick="saveAll()">💾 Сохранить изменения</button>
+</div>
+
+<!-- ═══════ CROPPER MODAL ═══════ -->
+<div class="crop-modal" id="crop-modal">
+  <div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:600" id="crop-title">Crop image</div>
+  <div class="crop-wrap" id="crop-wrap">
+    <img class="crop-img" id="crop-img" alt="">
+    <div class="crop-overlay">
+      <div id="crop-mask"></div>
+    </div>
+  </div>
+  <div class="crop-hint">Drag to pan · Slider to zoom</div>
+  <div class="crop-controls">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M8 11h6m-3-3v6"/></svg>
+    <input class="crop-slider" type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1" oninput="cropZoom()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M8 11h6"/></svg>
+  </div>
+  <div class="crop-btns">
+    <button class="crop-btn cancel" onclick="closeCropper()">Cancel</button>
+    <button class="crop-btn confirm" onclick="confirmCrop()">Apply ✓</button>
+  </div>
 </div>
 
 <div class="lightbox" id="lb" onclick="closeLb()"><button class="lb-close">✕</button><img id="lb-img" src="" alt=""></div>
@@ -434,11 +472,18 @@ async function binGet(){
 async function binSet(data){
   const key=localStorage.getItem(LS_KEY);
   const bin=localStorage.getItem(LS_BIN);
+  const body = JSON.stringify(data);
+  // JSONBin free plan limit: 512KB
+  const sizeKB = Math.round(body.length / 1024);
+  if(body.length > 500000){
+    throw new Error(`Данные слишком большие (${sizeKB}KB > 500KB). Уменьши количество фото в галерее или размер картинок.`);
+  }
   const r = await fetch(`${JSONBIN}/b/${bin}`,{
     method:'PUT',
     headers:{'Content-Type':'application/json','X-Master-Key':key},
-    body: JSON.stringify(data)
+    body
   });
+  if(r.status===403) throw new Error('403: Проверь API ключ в JSONBin — возможно он истёк или неверный');
   if(!r.ok) throw new Error('Ошибка сохранения: '+r.status);
   return await r.json();
 }
@@ -519,15 +564,16 @@ async function init(){
 /* ── AUTH ── */
 function login(){
   const val = $('pwd').value;
+  $('lgn-err').textContent='';
   const stored = localStorage.getItem(LS_PWD);
-  if(!stored){ $('lgn-err').textContent='Пароль не установлен. Удалите tl_bin из localStorage и перенастройте.'; return; }
+  if(!stored){ $('lgn-err').textContent='Password not set. Re-run setup.'; return; }
   if(btoa(val)===stored){ showPage('adm'); loadAdm(); }
-  else $('lgn-err').textContent='Неверный пароль';
+  else $('lgn-err').textContent='Incorrect password';
 }
 function showPub(){ renderPub(); showPage('pub'); }
 
-/* ── IMAGE COMPRESS & LOAD ── */
-function compressImg(file, maxW, quality=0.82){
+/* ── IMAGE COMPRESS ── */
+function compressImg(file, maxW, quality=0.80){
   return new Promise(res=>{
     const r=new FileReader();
     r.onload=e=>{
@@ -545,11 +591,161 @@ function compressImg(file, maxW, quality=0.82){
   });
 }
 
-async function loadImg(inp, prevId, key, maxW=800){
+/* ── CROPPER ── */
+let _cropState = null;
+
+function openCropper(file, {maxW, quality=0.80, circle=false, aspect=1, title='Crop image', onDone}){
+  _cropState = {maxW, quality, circle, aspect, onDone, scale:1, ox:0, oy:0, dragging:false, lx:0, ly:0};
+  const url = URL.createObjectURL(file);
+  const ci = $('crop-img');
+  ci.onload = () => {
+    const vw = Math.min(window.innerWidth - 32, 400);
+    const vh = Math.round(vw / aspect);
+    const wrap = $('crop-wrap');
+    wrap.style.width = vw+'px';
+    wrap.style.height = vh+'px';
+
+    const mask = $('crop-mask');
+    if(circle){
+      mask.className='crop-circle-mask';
+      const size = Math.min(vw,vh) * 0.88;
+      mask.style.cssText=`left:${(vw-size)/2}px;top:${(vh-size)/2}px;width:${size}px;height:${size}px;position:absolute`;
+    } else {
+      mask.className='crop-rect-mask';
+      const pad=16;
+      mask.style.cssText=`left:${pad}px;top:${pad}px;width:${vw-pad*2}px;height:${vh-pad*2}px;position:absolute`;
+    }
+
+    _cropState.natW = ci.naturalWidth;
+    _cropState.natH = ci.naturalHeight;
+    _cropState.vw = vw; _cropState.vh = vh;
+    // fit image to wrap
+    const fitScale = Math.max(vw/ci.naturalWidth, vh/ci.naturalHeight);
+    _cropState.baseScale = fitScale;
+    _cropState.scale = 1;
+    _cropState.ox = (vw - ci.naturalWidth*fitScale)/2;
+    _cropState.oy = (vh - ci.naturalHeight*fitScale)/2;
+    $('crop-zoom').value = 1;
+    applyCropTransform();
+  };
+  ci.src = url;
+  _cropState.objUrl = url;
+  $('crop-title').textContent = title;
+  $('crop-modal').classList.add('open');
+
+  // events
+  const wrap = $('crop-wrap');
+  wrap.onmousedown = cropDragStart;
+  wrap.ontouchstart = cropDragStart;
+  document.onmousemove = cropDragMove;
+  document.ontouchmove = cropDragMove;
+  document.onmouseup = cropDragEnd;
+  document.ontouchend = cropDragEnd;
+}
+
+function applyCropTransform(){
+  const s = _cropState;
+  const sc = s.baseScale * s.scale;
+  $('crop-img').style.transform = `translate(${s.ox}px,${s.oy}px) scale(${sc})`;
+  $('crop-img').style.transformOrigin = '0 0';
+}
+
+function cropZoom(){
+  if(!_cropState) return;
+  _cropState.scale = parseFloat($('crop-zoom').value);
+  clampCrop();
+  applyCropTransform();
+}
+
+function clampCrop(){
+  const s = _cropState;
+  const sc = s.baseScale * s.scale;
+  const iw = s.natW * sc, ih = s.natH * sc;
+  s.ox = Math.min(0, Math.max(s.vw - iw, s.ox));
+  s.oy = Math.min(0, Math.max(s.vh - ih, s.oy));
+}
+
+function cropDragStart(e){
+  _cropState.dragging=true;
+  const p = e.touches?e.touches[0]:e;
+  _cropState.lx=p.clientX; _cropState.ly=p.clientY;
+  $('crop-wrap').classList.add('grabbing');
+  e.preventDefault();
+}
+function cropDragMove(e){
+  if(!_cropState||!_cropState.dragging) return;
+  const p = e.touches?e.touches[0]:e;
+  _cropState.ox += p.clientX - _cropState.lx;
+  _cropState.oy += p.clientY - _cropState.ly;
+  _cropState.lx=p.clientX; _cropState.ly=p.clientY;
+  clampCrop();
+  applyCropTransform();
+  e.preventDefault();
+}
+function cropDragEnd(){ if(_cropState) { _cropState.dragging=false; $('crop-wrap').classList.remove('grabbing'); } }
+
+function closeCropper(){
+  $('crop-modal').classList.remove('open');
+  if(_cropState&&_cropState.objUrl) URL.revokeObjectURL(_cropState.objUrl);
+  _cropState=null;
+}
+
+function confirmCrop(){
+  const s = _cropState;
+  if(!s) return;
+  const sc = s.baseScale * s.scale;
+
+  // Determine output size
+  let outW, outH;
+  if(s.circle){
+    const maskEl = $('crop-mask');
+    const size = parseFloat(maskEl.style.width);
+    outW = outH = Math.round(size);
+  } else {
+    const maskEl = $('crop-mask');
+    outW = parseFloat(maskEl.style.width);
+    outH = parseFloat(maskEl.style.height);
+  }
+  const maskX = parseFloat($('crop-mask').style.left||0);
+  const maskY = parseFloat($('crop-mask').style.top||0);
+
+  const canvas = document.createElement('canvas');
+  // Limit output resolution
+  const ratio = Math.min(1, s.maxW/outW);
+  canvas.width = Math.round(outW*ratio);
+  canvas.height = Math.round(outH*ratio);
+  const ctx = canvas.getContext('2d');
+
+  if(s.circle){
+    ctx.beginPath();
+    ctx.arc(canvas.width/2,canvas.height/2,canvas.width/2,0,Math.PI*2);
+    ctx.clip();
+  }
+
+  // src coords in image space
+  const srcX = (maskX - s.ox) / sc;
+  const srcY = (maskY - s.oy) / sc;
+  const srcW = outW / sc;
+  const srcH = outH / sc;
+
+  ctx.drawImage($('crop-img'), srcX, srcY, srcW, srcH, 0, 0, canvas.width, canvas.height);
+  const result = canvas.toDataURL('image/jpeg', s.quality);
+  closeCropper();
+  s.onDone(result);
+}
+
+/* ── LOAD IMG WITH CROPPER ── */
+function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
   if(!inp.files[0])return;
-  const data = await compressImg(inp.files[0], maxW);
-  C[key]=data;
-  const p=$(prevId); p.src=data; p.style.display='block';
+  const q = key==='d_banner' ? 0.72 : 0.82;
+  const title = key==='d_avatar'?'Crop avatar':key==='d_banner'?'Crop banner':'Crop image';
+  openCropper(inp.files[0], {
+    maxW, quality:q, circle, aspect, title,
+    onDone: (data)=>{
+      C[key]=data;
+      const p=$(prevId); if(p){ p.src=data; p.style.display='block'; }
+    }
+  });
 }
 
 /* ── PUBLIC RENDER ── */
