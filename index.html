@@ -213,29 +213,36 @@ textarea.inp{resize:vertical;min-height:64px}
 <!-- SPINNER -->
 <div class="page-spinner" id="spinner"><div class="spinner-ring"></div></div>
 
-<!-- ═══════ SETUP (показывается если не настроен JSONBin) ═══════ -->
+<!-- ═══════ SETUP ═══════ -->
 <div id="setup" style="display:none">
   <div class="setup-box">
     <h2>⚙️ Первичная настройка</h2>
-    <p>Для хранения данных нужен бесплатный аккаунт <strong>JSONBin.io</strong>. Это займёт 3 минуты.</p>
-    <div class="info-banner">📌 Данные хранятся в облаке — страница будет работать с любого устройства 24/7</div>
+    <p>Для хранения данных нужен бесплатный аккаунт <strong>JSONBin.io</strong> + Cloudinary (для фото и видео).</p>
+    <div class="info-banner">📌 Всё будет храниться в облаке. Страница будет работать 24/7 с любого устройства.</div>
+    
     <div class="setup-step">
       <div class="setup-step-num">Шаг 1</div>
-      <p>Зарегистрируйся на <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> (бесплатно, без карты)</p>
+      <p>JSONBin API Key (уже есть у тебя):</p>
+      <input class="inp" id="setup-key" value="$2a$10$NMKPMN9atLj7ZIWBVO1k1.jTUpwBalTjlS7BeZN4256.Seqy1wfky" placeholder="$2a$10$...">
     </div>
     <div class="setup-step">
       <div class="setup-step-num">Шаг 2</div>
-      <p>В разделе <strong>API Keys</strong> создай ключ и вставь его сюда:</p>
-      <input class="inp" id="setup-key" placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxx" style="margin-bottom:8px">
+      <p>Cloudinary Cloud Name (твой аккаунт):</p>
+      <input class="inp" id="setup-cloud" placeholder="Например: taplink или dabc123" value="taplink">
     </div>
     <div class="setup-step">
       <div class="setup-step-num">Шаг 3</div>
-      <p>Придумай пароль для входа в админку:</p>
-      <input type="password" class="inp" id="setup-pwd" placeholder="Минимум 6 символов" style="margin-bottom:8px">
+      <p>Cloudinary Upload Preset (уже создан):</p>
+      <input class="inp" id="setup-preset" value="taplink" placeholder="taplink">
+    </div>
+    <div class="setup-step">
+      <div class="setup-step-num">Шаг 4</div>
+      <p>Пароль для админки (минимум 6 символов):</p>
+      <input type="password" class="inp" id="setup-pwd" placeholder="Минимум 6 символов">
     </div>
     <div class="lgn-err" id="setup-err"></div>
     <div style="height:10px"></div>
-    <button class="save-btn" id="setup-btn" onclick="doSetup()">🚀 Создать страницу</button>
+    <button class="save-btn" id="setup-btn" onclick="doSetup()">🚀 Создать / обновить страницу</button>
   </div>
 </div>
 
@@ -308,6 +315,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="adm-badge">Admin</div>
   </div>
 
+  <!-- Профиль -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Профиль</div>
     <div class="fl"><label class="lbl">Имя <span class="hint">— отображается на странице</span></label><input class="inp" id="a-name" placeholder="Ваше имя"></div>
@@ -332,6 +340,7 @@ textarea.inp{resize:vertical;min-height:64px}
     </div>
   </div>
 
+  <!-- Соцсети -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>Соцсети (иконки над именем)</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Иконка: круглое фото 120×120 px. Ссылка — полный URL.</div>
@@ -339,6 +348,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <button class="upbtn" onclick="addSoc()" style="margin-top:8px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>Добавить соцсеть</button>
   </div>
 
+  <!-- Featured -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/></svg>Большая карточка (featured)</div>
     <div class="trow"><div class="trow-l"><div class="trow-title">Показывать</div></div><label class="tog"><input type="checkbox" id="a-feat-on"><span class="tog-sl"></span></label></div>
@@ -352,6 +362,7 @@ textarea.inp{resize:vertical;min-height:64px}
     </div>
   </div>
 
+  <!-- Grid cards -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Карточки-сетка (2 в ряд)</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Фото: 600×450 px (4:3), JPG/PNG. До 4 карточек.</div>
@@ -359,6 +370,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <button class="upbtn" onclick="addGridCard()" style="margin-top:6px" id="a-grid-add-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>Добавить карточку</button>
   </div>
 
+  <!-- Wide buttons -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="8" width="18" height="8" rx="3"/></svg>Широкие кнопки-ссылки</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Иконка кнопки: квадрат 200×200 px, JPG/PNG.</div>
@@ -366,15 +378,20 @@ textarea.inp{resize:vertical;min-height:64px}
     <button class="upbtn" onclick="addBtn()" style="margin-top:6px"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>Добавить кнопку</button>
   </div>
 
+  <!-- Video -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Видео (зациклено, без звука)</div>
     <div class="trow"><div class="trow-l"><div class="trow-title">Показывать видео</div><div class="trow-desc">Автовоспроизведение, без звука, зациклено</div></div><label class="tog"><input type="checkbox" id="a-vid-on"><span class="tog-sl"></span></label></div>
     <div style="height:10px"></div>
-    <div class="info-banner" style="font-size:12px;margin:0">📎 Видео нужно загрузить на <strong>YouTube</strong> или <strong>Cloudinary</strong> (бесплатно) и вставить прямую ссылку. Это даёт лучшее качество и скорость загрузки.</div>
-    <div style="height:8px"></div>
-    <div class="fl"><label class="lbl">Прямая ссылка на видео MP4 <span class="hint">(https://...mp4)</span></label><input class="inp" id="a-vid-url" placeholder="https://res.cloudinary.com/.../video.mp4"></div>
+    <div class="fl">
+      <label class="lbl">Загрузить видео MP4 <span class="hint">(до 20+ МБ)</span></label>
+      <label class="upbtn" id="vid-upload-btn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить видео<input type="file" accept="video/mp4" style="display:none" onchange="uploadVideo(this)"></label>
+    </div>
+    <div class="fl"><label class="lbl">Прямая ссылка на видео (или после загрузки)</label><input class="inp" id="a-vid-url" placeholder="https://res.cloudinary.com/.../video.mp4"></div>
+    <div id="video-preview-adm" style="margin-top:8px;display:none"><video width="100%" height="180" controls></video></div>
   </div>
 
+  <!-- Gallery -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Фотогалерея</div>
     <div class="trow"><div class="trow-l"><div class="trow-title">Показывать галерею</div></div><label class="tog"><input type="checkbox" id="a-gal-on"><span class="tog-sl"></span></label></div>
@@ -382,6 +399,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="gal-mgr" id="a-gal-mgr"><button class="gal-add" onclick="addGalPhoto()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg></button></div>
   </div>
 
+  <!-- Прочее -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 18v2m10-10h-2M4 12H2m15.07-7.07-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>Прочее</div>
     <div class="fl"><label class="lbl">Заголовок вкладки браузера</label><input class="inp" id="a-tab" placeholder="My Link"></div>
@@ -391,7 +409,7 @@ textarea.inp{resize:vertical;min-height:64px}
   <button class="save-btn" id="save-btn" onclick="saveAll()">💾 Сохранить изменения</button>
 </div>
 
-<!-- ═══════ CROPPER MODAL ═══════ -->
+<!-- CROPPER -->
 <div class="crop-modal" id="crop-modal">
   <div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:600" id="crop-title">Crop image</div>
   <div class="crop-wrap" id="crop-wrap">
@@ -417,20 +435,16 @@ textarea.inp{resize:vertical;min-height:64px}
 <input type="file" accept="image/*" id="gal-fi" style="display:none" onchange="handleGalPhoto(this)">
 
 <script>
-/* ════════════════════════════════════════
-   STORAGE: JSONBin.io
-   Все данные хранятся в облаке.
-   API Key и Bin ID — в localStorage (только на твоём устройстве).
-   Пароль — тоже в localStorage.
-════════════════════════════════════════ */
+/* ====================== НАСТРОЙКИ ====================== */
+const LS_KEY        = 'tl_key';
+const LS_BIN        = 'tl_bin';
+const LS_PWD        = 'tl_pwd';
+const LS_CLOUD_NAME = 'tl_cloud_name';
+const LS_PRESET     = 'tl_preset';
 
-const LS_KEY   = 'tl_key';    // JSONBin API key
-const LS_BIN   = 'tl_bin';    // JSONBin bin ID
-const LS_PWD   = 'tl_pwd';    // admin password (hashed simple)
+const JSONBIN = 'https://api.jsonbin.io/v3';
 
-const JSONBIN  = 'https://api.jsonbin.io/v3';
-
-let C = null; // current config
+let C = null; // текущая конфигурация
 
 const DEF = {
   name:'Your Name',handle:'@yourhandle',bio:'Описание профиля',
@@ -442,7 +456,7 @@ const DEF = {
   socials:[],gridCards:[],buttons:[],gallery:[]
 };
 
-/* ── helpers ── */
+/* ====================== HELPERS ====================== */
 function $(id){ return document.getElementById(id); }
 function showEl(id){ $(id).style.display='block'; }
 function hideEl(id){ $(id).style.display='none'; }
@@ -452,179 +466,199 @@ function showToast(msg, err=false){
   const t=$('toast'); t.textContent=msg;
   t.classList.toggle('err',err);
   t.classList.add('on');
-  setTimeout(()=>t.classList.remove('on'),2500);
+  setTimeout(()=>t.classList.remove('on'),2800);
 }
 
-function spinner(on){ on ? $('spinner').classList.remove('hidden') : $('spinner').classList.add('hidden'); }
+function spinner(on){ $('spinner').classList.toggle('hidden', !on); }
 
-/* ── JSONBin API ── */
-async function binGet(){
-  const key=localStorage.getItem(LS_KEY);
-  const bin=localStorage.getItem(LS_BIN);
-  if(!key||!bin) return null;
-  const r = await fetch(`${JSONBIN}/b/${bin}/latest`,{
-    headers:{'X-Master-Key':key,'X-Bin-Meta':'false'}
+/* ====================== CLOUDINARY ====================== */
+async function uploadToCloudinary(fileOrDataUrl, resourceType = 'image') {
+  const cloudName = localStorage.getItem(LS_CLOUD_NAME);
+  const preset    = localStorage.getItem(LS_PRESET);
+  if (!cloudName || !preset) throw new Error('Cloudinary не настроен. Вернитесь в Setup.');
+
+  let file;
+  if (typeof fileOrDataUrl === 'string' && fileOrDataUrl.startsWith('data:')) {
+    file = dataURLtoFile(fileOrDataUrl, 'cropped.jpg');
+  } else {
+    file = fileOrDataUrl;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', preset);
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`, {
+    method: 'POST',
+    body: formData
   });
-  if(!r.ok) throw new Error('Ошибка загрузки: '+r.status);
+
+  if (!res.ok) throw new Error('Cloudinary error: ' + res.status);
+  const data = await res.json();
+  return data.secure_url; // надёжная HTTPS ссылка
+}
+
+function dataURLtoFile(dataurl, filename) {
+  const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length, u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new File([u8arr], filename, {type: mime});
+}
+
+/* ====================== JSONBIN ====================== */
+async function binGet(){
+  const key = localStorage.getItem(LS_KEY);
+  const bin = localStorage.getItem(LS_BIN);
+  if(!key || !bin) return null;
+  const r = await fetch(`${JSONBIN}/b/${bin}/latest`, {
+    headers: {'X-Master-Key': key, 'X-Bin-Meta': 'false'}
+  });
+  if(!r.ok) throw new Error('JSONBin error ' + r.status);
   return await r.json();
 }
 
 async function binSet(data){
-  const key=localStorage.getItem(LS_KEY);
-  const bin=localStorage.getItem(LS_BIN);
+  const key = localStorage.getItem(LS_KEY);
+  const bin = localStorage.getItem(LS_BIN);
   const body = JSON.stringify(data);
-  // JSONBin free plan limit: 512KB
-  const sizeKB = Math.round(body.length / 1024);
-  if(body.length > 500000){
-    throw new Error(`Данные слишком большие (${sizeKB}KB > 500KB). Уменьши количество фото в галерее или размер картинок.`);
-  }
-  const r = await fetch(`${JSONBIN}/b/${bin}`,{
-    method:'PUT',
-    headers:{'Content-Type':'application/json','X-Master-Key':key},
+  if (body.length > 480000) throw new Error('Данные слишком большие. Убери пару фото из галереи.');
+  const r = await fetch(`${JSONBIN}/b/${bin}`, {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json','X-Master-Key':key},
     body
   });
-  if(r.status===403) throw new Error('403: Проверь API ключ в JSONBin — возможно он истёк или неверный');
-  if(!r.ok) throw new Error('Ошибка сохранения: '+r.status);
+  if(!r.ok) throw new Error('Ошибка сохранения: ' + r.status);
   return await r.json();
 }
 
 async function binCreate(key, initialData){
-  const r = await fetch(`${JSONBIN}/b`,{
+  const r = await fetch(`${JSONBIN}/b`, {
     method:'POST',
     headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'taplink','X-Bin-Private':'true'},
     body: JSON.stringify(initialData)
   });
-  if(!r.ok){
-    const err = await r.text();
-    throw new Error('Не удалось создать хранилище: '+r.status+' '+err);
-  }
+  if(!r.ok) throw new Error('Не удалось создать bin');
   const d = await r.json();
   return d.metadata.id;
 }
 
-/* ── SETUP ── */
+/* ====================== SETUP ====================== */
 async function doSetup(){
-  const key = $('setup-key').value.trim();
-  const pwd = $('setup-pwd').value.trim();
-  $('setup-err').textContent='';
-  if(!key){ $('setup-err').textContent='Вставьте API ключ'; return; }
-  if(pwd.length<6){ $('setup-err').textContent='Пароль минимум 6 символов'; return; }
-  
-  const btn=$('setup-btn'); btn.disabled=true; btn.textContent='Создаём...';
+  const key    = $('setup-key').value.trim();
+  const cloud  = $('setup-cloud').value.trim().toLowerCase();
+  const preset = $('setup-preset').value.trim();
+  const pwd    = $('setup-pwd').value.trim();
+  const errEl  = $('setup-err');
+
+  errEl.textContent = '';
+  if(!key || !cloud || !preset) return errEl.textContent = 'Заполните все поля';
+  if(pwd.length < 6) return errEl.textContent = 'Пароль минимум 6 символов';
+
+  const btn = $('setup-btn');
+  btn.disabled = true;
+  btn.textContent = 'Создаём...';
+
   try{
-    const binId = await binCreate(key, DEF);
+    let binId = localStorage.getItem(LS_BIN);
+    if(!binId) binId = await binCreate(key, DEF);
+
     localStorage.setItem(LS_KEY, key);
     localStorage.setItem(LS_BIN, binId);
+    localStorage.setItem(LS_CLOUD_NAME, cloud);
+    localStorage.setItem(LS_PRESET, preset);
     localStorage.setItem(LS_PWD, btoa(pwd));
-    C = Object.assign({},DEF);
-    spinner(false);
-    showToast('✓ Готово! Страница создана');
-    setTimeout(()=>{ renderPub(); showPage('pub'); },500);
+
+    C = Object.assign({}, DEF);
+    showToast('✓ Всё готово! Страница создана');
+    setTimeout(()=>{ renderPub(); showPage('pub'); }, 600);
   } catch(e){
-    $('setup-err').textContent = e.message;
-    btn.disabled=false; btn.textContent='🚀 Создать страницу';
+    errEl.textContent = e.message;
+    btn.disabled = false;
+    btn.textContent = '🚀 Создать / обновить страницу';
   }
 }
 
-/* ── INIT ── */
+/* ====================== INIT ====================== */
 async function init(){
   spinner(true);
-  const key=localStorage.getItem(LS_KEY);
-  const bin=localStorage.getItem(LS_BIN);
+  const key = localStorage.getItem(LS_KEY);
+  const bin = localStorage.getItem(LS_BIN);
 
-  if(!key||!bin){
-    // Не настроено — показать setup, если ?admin
-    if(location.search.includes('admin')){
-      spinner(false);
-      showPage('setup');
-    } else {
-      // Публичная страница без настройки
-      spinner(false);
-      C = Object.assign({},DEF);
-      renderPub(); showPage('pub');
-    }
+  if(!key || !bin){
+    spinner(false);
+    showPage('setup');
     return;
   }
 
   try{
     const data = await binGet();
-    C = Object.assign({},DEF, data);
+    C = Object.assign({}, DEF, data);
     renderPub();
     spinner(false);
-    if(location.search.includes('admin')){ showPage('lgn'); $('pwd').focus(); }
-    else showPage('pub');
+
+    if(location.search.includes('admin')){
+      showPage('lgn');
+      $('pwd').focus();
+    } else {
+      showPage('pub');
+    }
   } catch(e){
     spinner(false);
-    showToast('⚠️ Ошибка загрузки данных', true);
-    C = Object.assign({},DEF);
-    renderPub(); showPage('pub');
+    showToast('⚠️ Ошибка загрузки', true);
+    C = Object.assign({}, DEF);
+    renderPub(); 
+    showPage('pub');
   }
 }
 
-/* ── AUTH ── */
+/* ====================== AUTH ====================== */
 function login(){
   const val = $('pwd').value;
   $('lgn-err').textContent='';
   const stored = localStorage.getItem(LS_PWD);
-  if(!stored){ $('lgn-err').textContent='Password not set. Re-run setup.'; return; }
-  if(btoa(val)===stored){ showPage('adm'); loadAdm(); }
-  else $('lgn-err').textContent='Incorrect password';
+  if(btoa(val) === stored){
+    showPage('adm');
+    loadAdm();
+  } else {
+    $('lgn-err').textContent='Неверный пароль';
+  }
 }
 function showPub(){ renderPub(); showPage('pub'); }
 
-/* ── IMAGE COMPRESS ── */
-function compressImg(file, maxW, quality=0.80){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=e=>{
-      const img=new Image();
-      img.onload=()=>{
-        const scale=Math.min(1, maxW/img.width);
-        const w=Math.round(img.width*scale), h=Math.round(img.height*scale);
-        const c=document.createElement('canvas'); c.width=w; c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        res(c.toDataURL('image/jpeg',quality));
-      };
-      img.src=e.target.result;
-    };
-    r.readAsDataURL(file);
-  });
-}
-
-/* ── CROPPER ── */
+/* ====================== CROPPER ====================== */
 let _cropState = null;
 
-function openCropper(file, {maxW, quality=0.80, circle=false, aspect=1, title='Crop image', onDone}){
-  _cropState = {maxW, quality, circle, aspect, onDone, scale:1, ox:0, oy:0, dragging:false, lx:0, ly:0};
+function openCropper(file, {maxW, quality=0.80, circle=false, aspect=1, title='Crop image', key, prevId, onDone}){
+  _cropState = {maxW, quality, circle, aspect, key, prevId, onDone, scale:1, ox:0, oy:0, dragging:false, lx:0, ly:0};
   const url = URL.createObjectURL(file);
   const ci = $('crop-img');
   ci.onload = () => {
     const vw = Math.min(window.innerWidth - 32, 400);
     const vh = Math.round(vw / aspect);
     const wrap = $('crop-wrap');
-    wrap.style.width = vw+'px';
-    wrap.style.height = vh+'px';
+    wrap.style.width = vw + 'px';
+    wrap.style.height = vh + 'px';
 
     const mask = $('crop-mask');
     if(circle){
-      mask.className='crop-circle-mask';
-      const size = Math.min(vw,vh) * 0.88;
-      mask.style.cssText=`left:${(vw-size)/2}px;top:${(vh-size)/2}px;width:${size}px;height:${size}px;position:absolute`;
+      mask.className = 'crop-circle-mask';
+      const size = Math.min(vw, vh) * 0.88;
+      mask.style.cssText = `left:${(vw-size)/2}px;top:${(vh-size)/2}px;width:${size}px;height:${size}px`;
     } else {
-      mask.className='crop-rect-mask';
-      const pad=16;
-      mask.style.cssText=`left:${pad}px;top:${pad}px;width:${vw-pad*2}px;height:${vh-pad*2}px;position:absolute`;
+      mask.className = 'crop-rect-mask';
+      const pad = 16;
+      mask.style.cssText = `left:${pad}px;top:${pad}px;width:${vw-pad*2}px;height:${vh-pad*2}px`;
     }
 
     _cropState.natW = ci.naturalWidth;
     _cropState.natH = ci.naturalHeight;
     _cropState.vw = vw; _cropState.vh = vh;
-    // fit image to wrap
-    const fitScale = Math.max(vw/ci.naturalWidth, vh/ci.naturalHeight);
+    const fitScale = Math.max(vw / ci.naturalWidth, vh / ci.naturalHeight);
     _cropState.baseScale = fitScale;
     _cropState.scale = 1;
-    _cropState.ox = (vw - ci.naturalWidth*fitScale)/2;
-    _cropState.oy = (vh - ci.naturalHeight*fitScale)/2;
+    _cropState.ox = (vw - ci.naturalWidth * fitScale) / 2;
+    _cropState.oy = (vh - ci.naturalHeight * fitScale) / 2;
     $('crop-zoom').value = 1;
     applyCropTransform();
   };
@@ -633,7 +667,6 @@ function openCropper(file, {maxW, quality=0.80, circle=false, aspect=1, title='C
   $('crop-title').textContent = title;
   $('crop-modal').classList.add('open');
 
-  // events
   const wrap = $('crop-wrap');
   wrap.onmousedown = cropDragStart;
   wrap.ontouchstart = cropDragStart;
@@ -644,10 +677,10 @@ function openCropper(file, {maxW, quality=0.80, circle=false, aspect=1, title='C
 }
 
 function applyCropTransform(){
+  if(!_cropState) return;
   const s = _cropState;
   const sc = s.baseScale * s.scale;
   $('crop-img').style.transform = `translate(${s.ox}px,${s.oy}px) scale(${sc})`;
-  $('crop-img').style.transformOrigin = '0 0';
 }
 
 function cropZoom(){
@@ -666,211 +699,109 @@ function clampCrop(){
 }
 
 function cropDragStart(e){
-  _cropState.dragging=true;
-  const p = e.touches?e.touches[0]:e;
-  _cropState.lx=p.clientX; _cropState.ly=p.clientY;
+  _cropState.dragging = true;
+  const p = e.touches ? e.touches[0] : e;
+  _cropState.lx = p.clientX; _cropState.ly = p.clientY;
   $('crop-wrap').classList.add('grabbing');
   e.preventDefault();
 }
 function cropDragMove(e){
-  if(!_cropState||!_cropState.dragging) return;
-  const p = e.touches?e.touches[0]:e;
+  if(!_cropState || !_cropState.dragging) return;
+  const p = e.touches ? e.touches[0] : e;
   _cropState.ox += p.clientX - _cropState.lx;
   _cropState.oy += p.clientY - _cropState.ly;
-  _cropState.lx=p.clientX; _cropState.ly=p.clientY;
+  _cropState.lx = p.clientX; _cropState.ly = p.clientY;
   clampCrop();
   applyCropTransform();
   e.preventDefault();
 }
-function cropDragEnd(){ if(_cropState) { _cropState.dragging=false; $('crop-wrap').classList.remove('grabbing'); } }
+function cropDragEnd(){
+  if(_cropState) {
+    _cropState.dragging = false;
+    $('crop-wrap').classList.remove('grabbing');
+  }
+}
 
 function closeCropper(){
   $('crop-modal').classList.remove('open');
-  if(_cropState&&_cropState.objUrl) URL.revokeObjectURL(_cropState.objUrl);
-  _cropState=null;
+  if(_cropState && _cropState.objUrl) URL.revokeObjectURL(_cropState.objUrl);
+  _cropState = null;
 }
 
-function confirmCrop(){
+async function confirmCrop(){
   const s = _cropState;
   if(!s) return;
   const sc = s.baseScale * s.scale;
 
-  // Determine output size
   let outW, outH;
+  const maskEl = $('crop-mask');
   if(s.circle){
-    const maskEl = $('crop-mask');
     const size = parseFloat(maskEl.style.width);
     outW = outH = Math.round(size);
   } else {
-    const maskEl = $('crop-mask');
     outW = parseFloat(maskEl.style.width);
     outH = parseFloat(maskEl.style.height);
   }
-  const maskX = parseFloat($('crop-mask').style.left||0);
-  const maskY = parseFloat($('crop-mask').style.top||0);
 
   const canvas = document.createElement('canvas');
-  // Limit output resolution
-  const ratio = Math.min(1, s.maxW/outW);
-  canvas.width = Math.round(outW*ratio);
-  canvas.height = Math.round(outH*ratio);
+  const ratio = Math.min(1, s.maxW / outW);
+  canvas.width = Math.round(outW * ratio);
+  canvas.height = Math.round(outH * ratio);
   const ctx = canvas.getContext('2d');
 
   if(s.circle){
     ctx.beginPath();
-    ctx.arc(canvas.width/2,canvas.height/2,canvas.width/2,0,Math.PI*2);
+    ctx.arc(canvas.width/2, canvas.height/2, canvas.width/2, 0, Math.PI*2);
     ctx.clip();
   }
 
-  // src coords in image space
+  const maskX = parseFloat(maskEl.style.left || 0);
+  const maskY = parseFloat(maskEl.style.top || 0);
   const srcX = (maskX - s.ox) / sc;
   const srcY = (maskY - s.oy) / sc;
   const srcW = outW / sc;
   const srcH = outH / sc;
 
   ctx.drawImage($('crop-img'), srcX, srcY, srcW, srcH, 0, 0, canvas.width, canvas.height);
-  const result = canvas.toDataURL('image/jpeg', s.quality);
+
+  const resultDataUrl = canvas.toDataURL('image/jpeg', s.quality);
   closeCropper();
-  s.onDone(result);
+
+  try {
+    const url = await uploadToCloudinary(resultDataUrl, 'image');
+    C[s.key] = url;
+    const p = $(s.prevId);
+    if(p){ p.src = url; p.style.display = 'block'; }
+    showToast('✓ Загружено на Cloudinary');
+  } catch(e){
+    showToast('Ошибка загрузки: ' + e.message, true);
+  }
 }
 
-/* ── LOAD IMG WITH CROPPER ── */
-function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
-  if(!inp.files[0])return;
-  const q = key==='d_banner' ? 0.72 : 0.82;
-  const title = key==='d_avatar'?'Crop avatar':key==='d_banner'?'Crop banner':'Crop image';
-  openCropper(inp.files[0], {
-    maxW, quality:q, circle, aspect, title,
-    onDone: (data)=>{
-      C[key]=data;
-      const p=$(prevId); if(p){ p.src=data; p.style.display='block'; }
-    }
+/* ====================== ЗАГРУЗКА ИЗОБРАЖЕНИЙ ====================== */
+async function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
+  if(!inp.files[0]) return;
+  const file = inp.files[0];
+  const q = (key === 'd_banner') ? 0.72 : 0.82;
+  const title = (key==='d_avatar') ? 'Crop avatar' : (key==='d_banner') ? 'Crop banner' : 'Crop image';
+
+  openCropper(file, {
+    maxW, quality: q, circle, aspect, title,
+    key: key,
+    prevId: prevId
   });
 }
 
-/* ── PUBLIC RENDER ── */
-function renderPub(){
-  document.title = C.tabTitle||'My Link';
-
-  const hi=$('hero-img'), hp=$('hero-ph');
-  if(C.d_banner){ hi.src=C.d_banner; hi.style.display='block'; hp.style.display='none'; }
-  else{ hi.style.display='none'; hp.style.display='flex'; }
-
-  const ai=$('pub-avatar-img'), ap=$('pub-avatar-ph');
-  if(C.d_avatar){ ai.src=C.d_avatar; ai.style.display='block'; ap.style.display='none'; }
-  else{ ai.style.display='none'; ap.style.display='flex'; ap.textContent=(C.name||'AI').substring(0,2).toUpperCase(); }
-
-  $('pub-name').textContent=C.name||DEF.name;
-  $('pub-handle').textContent=C.handle||DEF.handle;
-  $('pub-bio').textContent=C.bio||DEF.bio;
-  $('pub-tagline').textContent=C.tagline||'';
-  $('pub-badge').style.display=C.badge?'inline-flex':'none';
-
-  const fl=$('pub-followers');
-  if(C.followers){ fl.style.display='flex'; $('pub-followers-text').textContent=C.followers; }
-  else fl.style.display='none';
-
-  // socials
-  const sr=$('pub-socials'); sr.innerHTML='';
-  (C.socials||[]).forEach(s=>{
-    const a=document.createElement('a'); a.className='social-icon'; a.href=s.url||'#'; a.target='_blank'; a.rel='noopener';
-    if(s.icon_data) a.innerHTML=`<img src="${s.icon_data}" alt="${s.name||''}">`;
-    else a.textContent=s.emoji||'🔗';
-    sr.appendChild(a);
-  });
-
-  // featured
-  const fw=$('pub-featured-wrap');
-  if(C.featOn){
-    fw.style.display='block';
-    $('pub-featured').href=C.featUrl||'#';
-    $('pub-featured-label').textContent=C.featLabel||'';
-    const fi=$('pub-featured-img'), fp=$('pub-featured-ph');
-    if(C.d_featured){ fi.src=C.d_featured; fi.style.display='block'; fp.style.display='none'; }
-    else{ fi.style.display='none'; fp.style.display='flex'; }
-  } else fw.style.display='none';
-
-  // grid cards
-  const pg=$('pub-grid'); pg.innerHTML='';
-  (C.gridCards||[]).slice(0,4).forEach(gc=>{
-    const a=document.createElement('a'); a.className='grid-card'; a.href=gc.url||'#'; a.target='_blank'; a.rel='noopener';
-    let inner='';
-    if(gc.img_data) inner+=`<img src="${gc.img_data}" alt="">`;
-    else inner+=`<div class="grid-card-ph">Нет фото</div>`;
-    if(gc.label) inner+=`<div class="grid-card-label">${gc.label}</div>`;
-    a.innerHTML=inner; pg.appendChild(a);
-  });
-  pg.style.display=(!C.gridCards||!C.gridCards.length)?'none':'grid';
-
-  // wide buttons
-  const pb=$('pub-btns'); pb.innerHTML='';
-  (C.buttons||[]).forEach(b=>{
-    const a=document.createElement('a'); a.className='wide-btn'; a.href=b.url||'#'; a.target='_blank'; a.rel='noopener';
-    let ico='';
-    if(b.icon_data) ico=`<div class="wide-btn-icon"><img src="${b.icon_data}" alt=""></div>`;
-    else if(b.emoji) ico=`<div class="wide-btn-icon">${b.emoji}</div>`;
-    a.innerHTML=`${ico}<div class="wide-btn-text"><div class="wide-btn-title">${b.title||''}</div>${b.sub?`<div class="wide-btn-sub">${b.sub}</div>`:''}</div><div class="wide-btn-arrow">›</div>`;
-    pb.appendChild(a);
-  });
-
-  // video — теперь по ссылке
-  const vw=$('pub-video-wrap');
-  if(C.videoOn&&C.videoUrl){ vw.style.display='block'; $('pub-video').src=C.videoUrl; }
-  else vw.style.display='none';
-
-  // gallery
-  const gw=$('pub-gallery-wrap');
-  if(C.galOn&&C.gallery&&C.gallery.length){
-    gw.style.display='block';
-    const gg=$('pub-gallery'); gg.innerHTML='';
-    C.gallery.forEach((src,i)=>{
-      const d=document.createElement('div'); d.className='gal-item';
-      d.innerHTML=`<img src="${src}" alt="photo ${i+1}">`;
-      d.onclick=()=>openLb(src); gg.appendChild(d);
-    });
-  } else gw.style.display='none';
-}
-
-/* ── LIGHTBOX ── */
-function openLb(src){ $('lb-img').src=src; $('lb').classList.add('open'); }
-function closeLb(){ $('lb').classList.remove('open'); }
-
-/* ── ADMIN LOAD ── */
-function loadAdm(){
-  $('a-name').value=C.name||'';
-  $('a-handle').value=C.handle||'';
-  $('a-bio').value=C.bio||'';
-  $('a-tagline').value=C.tagline||'';
-  $('a-followers').value=C.followers||'';
-  $('a-badge').checked=!!C.badge;
-  $('a-tab').value=C.tabTitle||'';
-  $('a-feat-on').checked=!!C.featOn;
-  $('a-feat-lbl').value=C.featLabel||'';
-  $('a-feat-url').value=C.featUrl||'';
-  $('a-vid-on').checked=!!C.videoOn;
-  $('a-vid-url').value=C.videoUrl||'';
-  $('a-gal-on').checked=!!C.galOn;
-
-  if(C.d_avatar){ const e=$('a-av-prev'); e.src=C.d_avatar; e.style.display='block'; }
-  if(C.d_banner){ const e=$('a-bn-prev'); e.src=C.d_banner; e.style.display='block'; }
-  if(C.d_featured){ const e=$('a-feat-prev'); e.src=C.d_featured; e.style.display='block'; }
-
-  renderAdmSocials();
-  renderAdmGridCards();
-  renderAdmBtns();
-  renderAdmGallery();
-}
-
-/* ── SOCIALS ── */
+/* ====================== СОЦСЕТИ ====================== */
 function renderAdmSocials(){
-  const c=$('a-soc-list'); c.innerHTML='';
+  const c = $('a-soc-list'); c.innerHTML='';
   (C.socials||[]).forEach((s,i)=>{
-    const r=document.createElement('div'); r.className='soc-row';
-    let icoHtml='';
-    if(s.icon_data) icoHtml=`<img src="${s.icon_data}" style="width:100%;height:100%;border-radius:50%;object-fit:cover" alt="">`;
-    else icoHtml=`<span style="font-size:18px">${s.emoji||'🔗'}</span>`;
-    r.innerHTML=`
-      <label class="soc-ico-preview" title="Нажмите для загрузки иконки">${icoHtml}<input type="file" accept="image/*" style="display:none" data-si="${i}" onchange="loadSocIcon(this)"></label>
+    const r = document.createElement('div'); r.className='soc-row';
+    let icoHtml = s.icon_data 
+      ? `<img src="${s.icon_data}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+      : `<span style="font-size:18px">${s.emoji||'🔗'}</span>`;
+    r.innerHTML = `
+      <label class="soc-ico-preview" title="Нажми для загрузки иконки">${icoHtml}<input type="file" accept="image/*" style="display:none" data-si="${i}" onchange="loadSocIcon(this)"></label>
       <input class="inp" value="${s.url||''}" placeholder="URL" oninput="C.socials[${i}].url=this.value">
       <div style="display:flex;gap:5px;align-items:center">
         <input class="inp" value="${s.emoji||''}" placeholder="😊" maxlength="4" oninput="C.socials[${i}].emoji=this.value" style="width:60px">
@@ -879,19 +810,27 @@ function renderAdmSocials(){
     c.appendChild(r);
   });
 }
-function addSoc(){ if(!C.socials)C.socials=[]; C.socials.push({url:'',emoji:'🔗',icon_data:''}); renderAdmSocials(); }
+function addSoc(){
+  if(!C.socials) C.socials = [];
+  C.socials.push({url:'',emoji:'🔗',icon_data:''});
+  renderAdmSocials();
+}
 async function loadSocIcon(inp){
-  const i=parseInt(inp.dataset.si);
-  const data = await compressImg(inp.files[0], 120, 0.85);
-  C.socials[i].icon_data=data; renderAdmSocials();
+  const i = parseInt(inp.dataset.si);
+  try{
+    const url = await uploadToCloudinary(inp.files[0], 'image');
+    C.socials[i].icon_data = url;
+    renderAdmSocials();
+    showToast('✓ Иконка загружена');
+  } catch(e){ showToast(e.message, true); }
 }
 
-/* ── GRID CARDS ── */
+/* ====================== GRID CARDS ====================== */
 function renderAdmGridCards(){
-  const c=$('a-grid-list'); c.innerHTML='';
+  const c = $('a-grid-list'); c.innerHTML='';
   (C.gridCards||[]).forEach((gc,i)=>{
-    const d=document.createElement('div'); d.className='btn-item';
-    d.innerHTML=`
+    const d = document.createElement('div'); d.className='btn-item';
+    d.innerHTML = `
       <div class="btn-item-hd">
         <span class="btn-item-num">Карточка ${i+1}</span>
         <div class="btn-item-acts">
@@ -904,32 +843,40 @@ function renderAdmGridCards(){
         <div class="fw"><label class="lbl">Подпись</label><input class="inp" value="${gc.label||''}" placeholder="Instagram" oninput="C.gridCards[${i}].label=this.value"></div>
         <div class="fw"><label class="lbl">Ссылка</label><input class="inp" value="${gc.url||''}" placeholder="https://" oninput="C.gridCards[${i}].url=this.value"></div>
         <div class="fw">
-          <label class="lbl">Фото <span style="color:var(--text3);font-weight:400">600×450 px (4:3)</span></label>
+          <label class="lbl">Фото</label>
           <label class="upbtn" style="height:36px">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>
-            ${gc.img_data?'✓ Фото загружено':'Загрузить фото'}
+            ${gc.img_data?'✓ Загружено':'Загрузить фото'}
             <input type="file" accept="image/*" style="display:none" data-gci="${i}" onchange="loadGCImg(this)">
           </label>
         </div>
       </div>`;
     c.appendChild(d);
   });
-  $('a-grid-add-btn').style.display=(C.gridCards||[]).length>=4?'none':'flex';
+  $('a-grid-add-btn').style.display = (C.gridCards||[]).length >= 4 ? 'none' : 'flex';
 }
-function addGridCard(){ if(!C.gridCards)C.gridCards=[]; if(C.gridCards.length>=4)return; C.gridCards.push({label:'',url:'',img_data:''}); renderAdmGridCards(); }
+function addGridCard(){
+  if(!C.gridCards) C.gridCards = [];
+  if(C.gridCards.length >= 4) return;
+  C.gridCards.push({label:'',url:'',img_data:''});
+  renderAdmGridCards();
+}
 function mvGC(i,d){ const j=i+d; [C.gridCards[i],C.gridCards[j]]=[C.gridCards[j],C.gridCards[i]]; renderAdmGridCards(); }
 async function loadGCImg(inp){
-  const i=parseInt(inp.dataset.gci);
-  const data = await compressImg(inp.files[0], 600);
-  C.gridCards[i].img_data=data; renderAdmGridCards();
+  const i = parseInt(inp.dataset.gci);
+  try{
+    const url = await uploadToCloudinary(inp.files[0], 'image');
+    C.gridCards[i].img_data = url;
+    renderAdmGridCards();
+  } catch(e){ showToast(e.message, true); }
 }
 
-/* ── WIDE BUTTONS ── */
+/* ====================== WIDE BUTTONS ====================== */
 function renderAdmBtns(){
-  const c=$('a-btns-list'); c.innerHTML='';
+  const c = $('a-btns-list'); c.innerHTML='';
   (C.buttons||[]).forEach((b,i)=>{
-    const d=document.createElement('div'); d.className='btn-item';
-    d.innerHTML=`
+    const d = document.createElement('div'); d.className='btn-item';
+    d.innerHTML = `
       <div class="btn-item-hd">
         <span class="btn-item-num">Кнопка ${i+1}</span>
         <div class="btn-item-acts">
@@ -944,10 +891,10 @@ function renderAdmBtns(){
         <div class="fw"><label class="lbl">Подпись</label><input class="inp" value="${b.sub||''}" placeholder="Краткое описание" oninput="C.buttons[${i}].sub=this.value"></div>
         <div class="fw"><label class="lbl">Ссылка</label><input class="inp" value="${b.url||''}" placeholder="https://" oninput="C.buttons[${i}].url=this.value"></div>
         <div class="fw">
-          <label class="lbl">Иконка <span style="color:var(--text3);font-weight:400">200×200 px, заменяет эмодзи</span></label>
+          <label class="lbl">Иконка</label>
           <label class="upbtn" style="height:36px">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>
-            ${b.icon_data?'✓ Иконка загружена':'Загрузить иконку'}
+            ${b.icon_data?'✓ Загружена':'Загрузить иконку'}
             <input type="file" accept="image/*" style="display:none" data-bi="${i}" onchange="loadBtnIcon(this)">
           </label>
         </div>
@@ -955,67 +902,230 @@ function renderAdmBtns(){
     c.appendChild(d);
   });
 }
-function addBtn(){ if(!C.buttons)C.buttons=[]; C.buttons.push({title:'Новая кнопка',sub:'',url:'https://',emoji:'🔗',icon_data:''}); renderAdmBtns(); }
+function addBtn(){
+  if(!C.buttons) C.buttons = [];
+  C.buttons.push({title:'Новая кнопка',sub:'',url:'https://',emoji:'🔗',icon_data:''});
+  renderAdmBtns();
+}
 function mvBtn(i,d){ const j=i+d; [C.buttons[i],C.buttons[j]]=[C.buttons[j],C.buttons[i]]; renderAdmBtns(); }
 async function loadBtnIcon(inp){
-  const i=parseInt(inp.dataset.bi);
-  const data = await compressImg(inp.files[0], 200, 0.9);
-  C.buttons[i].icon_data=data; renderAdmBtns();
+  const i = parseInt(inp.dataset.bi);
+  try{
+    const url = await uploadToCloudinary(inp.files[0], 'image');
+    C.buttons[i].icon_data = url;
+    renderAdmBtns();
+  } catch(e){ showToast(e.message, true); }
 }
 
-/* ── GALLERY ── */
+/* ====================== VIDEO ====================== */
+async function uploadVideo(inp){
+  if(!inp.files[0]) return;
+  const file = inp.files[0];
+  if(!file.type.startsWith('video/')) return showToast('Только MP4 файлы', true);
+
+  const btn = $('vid-upload-btn');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загружаем...`;
+
+  try{
+    const url = await uploadToCloudinary(file, 'video');
+    C.videoUrl = url;
+    $('a-vid-url').value = url;
+    showToast('✓ Видео загружено на Cloudinary');
+    renderAdmVideoPreview();
+  } catch(e){
+    showToast('Ошибка: ' + e.message, true);
+  } finally {
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить видео<input type="file" accept="video/mp4" style="display:none" onchange="uploadVideo(this)">`;
+  }
+}
+
+function renderAdmVideoPreview(){
+  const container = $('video-preview-adm');
+  if(C.videoUrl){
+    container.style.display = 'block';
+    container.innerHTML = `<video width="100%" height="180" controls><source src="${C.videoUrl}" type="video/mp4"></video>`;
+  }
+}
+
+/* ====================== GALLERY ====================== */
 function renderAdmGallery(){
-  const c=$('a-gal-mgr'); c.innerHTML='';
+  const c = $('a-gal-mgr'); c.innerHTML='';
   (C.gallery||[]).forEach((src,i)=>{
-    const d=document.createElement('div'); d.className='gal-th';
-    d.innerHTML=`<img src="${src}" alt=""><button class="gal-del" onclick="C.gallery.splice(${i},1);renderAdmGallery()">✕</button>`;
+    const d = document.createElement('div'); d.className='gal-th';
+    d.innerHTML = `<img src="${src}" alt=""><button class="gal-del" onclick="C.gallery.splice(${i},1);renderAdmGallery()">✕</button>`;
     c.appendChild(d);
   });
-  if((C.gallery||[]).length<9){
-    const b=document.createElement('button'); b.className='gal-add'; b.onclick=addGalPhoto;
-    b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>`;
+  if((C.gallery||[]).length < 9){
+    const b = document.createElement('button'); b.className='gal-add'; b.onclick=addGalPhoto;
+    b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg>`;
     c.appendChild(b);
   }
 }
 function addGalPhoto(){ $('gal-fi').click(); }
 async function handleGalPhoto(inp){
-  if(!inp.files[0])return;
-  const data = await compressImg(inp.files[0], 600);
-  if(!C.gallery)C.gallery=[];
-  C.gallery.push(data); renderAdmGallery(); inp.value='';
+  if(!inp.files[0]) return;
+  try{
+    const url = await uploadToCloudinary(inp.files[0], 'image');
+    if(!C.gallery) C.gallery = [];
+    C.gallery.push(url);
+    renderAdmGallery();
+    showToast('✓ Фото добавлено в галерею');
+  } catch(e){ showToast(e.message, true); }
+  inp.value = '';
 }
 
-/* ── SAVE (cloud) ── */
+/* ====================== PUBLIC RENDER ====================== */
+function renderPub(){
+  document.title = C.tabTitle || 'My Link';
+
+  // hero
+  const hi = $('hero-img'), hp = $('hero-ph');
+  if(C.d_banner){ hi.src = C.d_banner; hi.style.display='block'; hp.style.display='none'; }
+  else { hi.style.display='none'; hp.style.display='flex'; }
+
+  // avatar
+  const ai = $('pub-avatar-img'), ap = $('pub-avatar-ph');
+  if(C.d_avatar){ ai.src = C.d_avatar; ai.style.display='block'; ap.style.display='none'; }
+  else { ai.style.display='none'; ap.style.display='flex'; ap.textContent = (C.name||'AI').substring(0,2).toUpperCase(); }
+
+  $('pub-name').textContent = C.name || DEF.name;
+  $('pub-handle').textContent = C.handle || DEF.handle;
+  $('pub-bio').textContent = C.bio || DEF.bio;
+  $('pub-tagline').textContent = C.tagline || '';
+  $('pub-badge').style.display = C.badge ? 'inline-flex' : 'none';
+
+  const fl = $('pub-followers');
+  if(C.followers){ fl.style.display='flex'; $('pub-followers-text').textContent = C.followers; }
+  else fl.style.display='none';
+
+  // socials
+  const sr = $('pub-socials'); sr.innerHTML = '';
+  (C.socials||[]).forEach(s=>{
+    const a = document.createElement('a'); a.className='social-icon'; a.href=s.url||'#'; a.target='_blank'; a.rel='noopener';
+    if(s.icon_data) a.innerHTML = `<img src="${s.icon_data}" alt="">`;
+    else a.textContent = s.emoji || '🔗';
+    sr.appendChild(a);
+  });
+
+  // featured
+  const fw = $('pub-featured-wrap');
+  if(C.featOn){
+    fw.style.display='block';
+    $('pub-featured').href = C.featUrl || '#';
+    $('pub-featured-label').textContent = C.featLabel || '';
+    const fi = $('pub-featured-img'), fp = $('pub-featured-ph');
+    if(C.d_featured){ fi.src = C.d_featured; fi.style.display='block'; fp.style.display='none'; }
+    else { fi.style.display='none'; fp.style.display='flex'; }
+  } else fw.style.display='none';
+
+  // grid
+  const pg = $('pub-grid'); pg.innerHTML = '';
+  (C.gridCards||[]).slice(0,4).forEach(gc=>{
+    const a = document.createElement('a'); a.className='grid-card'; a.href=gc.url||'#'; a.target='_blank'; a.rel='noopener';
+    let inner = gc.img_data ? `<img src="${gc.img_data}" alt="">` : `<div class="grid-card-ph">Нет фото</div>`;
+    if(gc.label) inner += `<div class="grid-card-label">${gc.label}</div>`;
+    a.innerHTML = inner; pg.appendChild(a);
+  });
+  pg.style.display = (!C.gridCards || !C.gridCards.length) ? 'none' : 'grid';
+
+  // buttons
+  const pb = $('pub-btns'); pb.innerHTML = '';
+  (C.buttons||[]).forEach(b=>{
+    const a = document.createElement('a'); a.className='wide-btn'; a.href=b.url||'#'; a.target='_blank'; a.rel='noopener';
+    let ico = '';
+    if(b.icon_data) ico = `<div class="wide-btn-icon"><img src="${b.icon_data}" alt=""></div>`;
+    else if(b.emoji) ico = `<div class="wide-btn-icon">${b.emoji}</div>`;
+    a.innerHTML = `${ico}<div class="wide-btn-text"><div class="wide-btn-title">${b.title||''}</div>${b.sub?`<div class="wide-btn-sub">${b.sub}</div>`:''}</div><div class="wide-btn-arrow">›</div>`;
+    pb.appendChild(a);
+  });
+
+  // video
+  const vw = $('pub-video-wrap');
+  if(C.videoOn && C.videoUrl){
+    vw.style.display = 'block';
+    const vid = $('pub-video');
+    vid.src = C.videoUrl;
+  } else vw.style.display = 'none';
+
+  // gallery
+  const gw = $('pub-gallery-wrap');
+  if(C.galOn && C.gallery && C.gallery.length){
+    gw.style.display = 'block';
+    const gg = $('pub-gallery'); gg.innerHTML = '';
+    C.gallery.forEach((src,i)=>{
+      const d = document.createElement('div'); d.className='gal-item';
+      d.innerHTML = `<img src="${src}" alt="photo ${i+1}">`;
+      d.onclick = () => openLb(src);
+      gg.appendChild(d);
+    });
+  } else gw.style.display = 'none';
+}
+
+function openLb(src){ $('lb-img').src = src; $('lb').classList.add('open'); }
+function closeLb(){ $('lb').classList.remove('open'); }
+
+/* ====================== ADMIN LOAD ====================== */
+function loadAdm(){
+  $('a-name').value = C.name || '';
+  $('a-handle').value = C.handle || '';
+  $('a-bio').value = C.bio || '';
+  $('a-tagline').value = C.tagline || '';
+  $('a-followers').value = C.followers || '';
+  $('a-badge').checked = !!C.badge;
+  $('a-tab').value = C.tabTitle || '';
+  $('a-feat-on').checked = !!C.featOn;
+  $('a-feat-lbl').value = C.featLabel || '';
+  $('a-feat-url').value = C.featUrl || '#';
+  $('a-vid-on').checked = !!C.videoOn;
+  $('a-vid-url').value = C.videoUrl || '';
+  $('a-gal-on').checked = !!C.galOn;
+
+  if(C.d_avatar){ const e=$('a-av-prev'); e.src=C.d_avatar; e.style.display='block'; }
+  if(C.d_banner){ const e=$('a-bn-prev'); e.src=C.d_banner; e.style.display='block'; }
+  if(C.d_featured){ const e=$('a-feat-prev'); e.src=C.d_featured; e.style.display='block'; }
+
+  renderAdmSocials();
+  renderAdmGridCards();
+  renderAdmBtns();
+  renderAdmGallery();
+  renderAdmVideoPreview();
+}
+
+/* ====================== SAVE ====================== */
 async function saveAll(){
-  C.name=$('a-name').value||DEF.name;
-  C.handle=$('a-handle').value||DEF.handle;
-  C.bio=$('a-bio').value||DEF.bio;
-  C.tagline=$('a-tagline').value||'';
-  C.followers=$('a-followers').value||'';
-  C.badge=$('a-badge').checked;
-  C.tabTitle=$('a-tab').value||'My Link';
-  C.featOn=$('a-feat-on').checked;
-  C.featLabel=$('a-feat-lbl').value||'';
-  C.featUrl=$('a-feat-url').value||'#';
-  C.videoOn=$('a-vid-on').checked;
-  C.videoUrl=$('a-vid-url').value.trim()||'';
-  C.galOn=$('a-gal-on').checked;
+  C.name = $('a-name').value || DEF.name;
+  C.handle = $('a-handle').value || DEF.handle;
+  C.bio = $('a-bio').value || DEF.bio;
+  C.tagline = $('a-tagline').value || '';
+  C.followers = $('a-followers').value || '';
+  C.badge = $('a-badge').checked;
+  C.tabTitle = $('a-tab').value || 'My Link';
+  C.featOn = $('a-feat-on').checked;
+  C.featLabel = $('a-feat-lbl').value || '';
+  C.featUrl = $('a-feat-url').value || '#';
+  C.videoOn = $('a-vid-on').checked;
+  C.videoUrl = $('a-vid-url').value.trim();
+  C.galOn = $('a-gal-on').checked;
 
-  const np=$('a-pwd').value.trim();
-  if(np){ localStorage.setItem(LS_PWD, btoa(np)); $('a-pwd').value=''; }
+  const np = $('a-pwd').value.trim();
+  if(np){ localStorage.setItem(LS_PWD, btoa(np)); $('a-pwd').value = ''; }
 
-  const btn=$('save-btn'); btn.disabled=true; btn.textContent='Сохраняем...';
+  const btn = $('save-btn');
+  btn.disabled = true;
+  btn.textContent = 'Сохраняем...';
+
   try{
     await binSet(C);
     showToast('✓ Сохранено в облаке');
   } catch(e){
-    showToast('⚠️ Ошибка: '+e.message, true);
+    showToast('⚠️ ' + e.message, true);
   } finally{
-    btn.disabled=false; btn.textContent='💾 Сохранить изменения';
+    btn.disabled = false;
+    btn.textContent = '💾 Сохранить изменения';
   }
 }
 
-/* ── BOOT ── */
+/* ====================== BOOT ====================== */
 init();
 </script>
 </body>
