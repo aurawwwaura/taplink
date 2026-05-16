@@ -30,8 +30,12 @@ body{overflow-x:hidden}
 .profile-avatar{width:144px;height:144px;border-radius:50%;object-fit:cover;border:3px solid var(--bg);display:block;background:var(--bg3)}
 .profile-avatar-ph{width:144px;height:144px;border-radius:50%;background:var(--bg3);border:3px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:700;color:var(--text2)}
 .profile-name{font-size:22px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:2px}
-.profile-name .badge{width:20px;height:20px;background:#1d9bf0;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.profile-name .badge svg{width:11px;height:11px;fill:white}
+.profile-name .badge{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.profile-name .badge svg{width:22px;height:22px}
+
+/* Section headings */
+.sec-heading{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;padding:0 2px}
+.sec-heading.accent{color:var(--text2)}
 .profile-handle{font-size:13px;color:var(--text2);margin-bottom:10px}
 .profile-bio{font-size:14px;color:var(--text2);line-height:1.55;margin-bottom:14px;max-width:340px;margin-left:auto;margin-right:auto}
 
@@ -161,9 +165,9 @@ textarea.inp{resize:vertical;min-height:64px}
 .lgn-err{color:#ff5f5f;font-size:13px;margin-top:8px;min-height:16px}
 
 .ipreview{width:100%;object-fit:cover;border-radius:8px;margin-top:7px;border:1px solid var(--border);display:none}
-.ipreview.sq{width:144px;height:144px;border-radius:50%}
-.ipreview.banner{width:100%;aspect-ratio:4/5;max-height:320px;border-radius:0}
-.ipreview.featured{width:100%;aspect-ratio:16/9;border-radius:var(--r)}
+.ipreview.sq{width:96px;height:96px;border-radius:50%;object-fit:cover}
+.ipreview.banner{width:100%;aspect-ratio:4/5;max-height:260px;object-fit:cover;border-radius:10px}
+.ipreview.featured{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r)}
 
 .soc-list{display:flex;flex-direction:column;gap:7px}
 .soc-row{display:grid;grid-template-columns:36px 1fr 1fr;gap:7px;align-items:center}
@@ -173,7 +177,28 @@ textarea.inp{resize:vertical;min-height:64px}
 .soc-add-btn{padding:9px 14px;background:var(--bg3);border:1px dashed var(--border2);border-radius:9px;color:var(--text2);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
 .soc-add-btn:hover{border-color:var(--accent);color:#a5aaff}
 
-/* SETUP SCREEN */
+/* ═══════ STATS PAGE ═══════ */
+#stats{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:28px 16px 60px}
+.stats-wrap{width:100%;max-width:480px;animation:fadeUp .4s ease both}
+.stats-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.stats-title{font-size:18px;font-weight:800}
+.stats-back{background:none;border:none;color:var(--text2);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;padding:0}
+.stats-back svg{width:14px;height:14px;stroke:currentColor}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px}
+.stat-card.full{grid-column:1/-1}
+.stat-num{font-size:28px;font-weight:800;color:#fff;line-height:1}
+.stat-label{font-size:12px;color:var(--text3);margin-top:4px;font-weight:500}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.stat-bar-wrap{margin-top:12px}
+.stat-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.stat-bar-label{font-size:12px;color:var(--text2);width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stat-bar-track{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.stat-bar-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .6s ease}
+.stat-bar-val{font-size:12px;color:var(--text3);width:32px;text-align:right;flex-shrink:0}
+.stat-info{font-size:12px;color:var(--text3);line-height:1.5;margin-top:6px}
+.stat-reset{background:none;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Inter',sans-serif;padding:6px 12px;cursor:pointer;transition:all .15s;margin-top:10px}
+.stat-reset:hover{border-color:#ff5f5f;color:#ff5f5f}
 #setup{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .setup-box{width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;animation:fadeUp .4s ease both}
 .setup-box h2{font-size:18px;font-weight:800;margin-bottom:6px}
@@ -237,7 +262,7 @@ textarea.inp{resize:vertical;min-height:64px}
 <!-- ═══════ PUBLIC ═══════ -->
 <div id="pub" style="display:none">
   <div class="hero">
-    <div id="hero-ph" class="hero-placeholder">Баннер не загружен</div>
+    <div id="hero-ph" class="hero-placeholder">No banner</div>
     <img id="hero-img" style="display:none;width:100%;max-height:400px;object-fit:cover" alt="banner">
     <div class="hero-grad"></div>
   </div>
@@ -248,10 +273,16 @@ textarea.inp{resize:vertical;min-height:64px}
     </div>
     <div class="profile-name">
       <span id="pub-name">Your Name</span>
-      <span class="badge" id="pub-badge" style="display:none"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="none" stroke="white" stroke-width="2.5"/></svg></span>
+      <span class="badge" id="pub-badge" style="display:none">
+        <!-- Real Instagram/Twitter-style verified checkmark -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+          <path d="M20 2.5L23.9 6.9L29.8 5.7L31.5 11.5L37.1 13.8L35.3 19.5L38.5 24.5L34.1 28L34.1 34L28.1 33.4L24.5 38.1L19.5 35.5L14.5 38.1L10.9 33.4L4.9 34L4.9 28L0.5 24.5L3.7 19.5L1.9 13.8L7.5 11.5L9.2 5.7L15.1 6.9L20 2.5Z" fill="#1d9bf0"/>
+          <path d="M13 20.5L17.5 25L27 15.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
     </div>
-    <div class="profile-handle" id="pub-handle">@yourhandle</div>
-    <div class="profile-bio" id="pub-bio">Описание профиля</div>
+    <div class="profile-handle" id="pub-handle">@handle</div>
+    <div class="profile-bio" id="pub-bio"></div>
     <div class="socials-row" id="pub-socials"></div>
     <div class="followers-line" id="pub-followers" style="display:none">
       <span id="pub-followers-text"></span>
@@ -260,23 +291,44 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="tagline" id="pub-tagline"></div>
   </div>
   <div class="content">
+    <div id="pub-sec-featured" style="display:none"><div class="sec-heading" id="pub-sec-featured-txt"></div></div>
     <div id="pub-featured-wrap" style="display:none">
       <a id="pub-featured" class="featured-card" href="#" target="_blank" rel="noopener">
-        <div class="featured-card-ph" id="pub-featured-ph">Загрузите обложку</div>
+        <div class="featured-card-ph" id="pub-featured-ph">Upload cover image</div>
         <img id="pub-featured-img" style="display:none;width:100%;height:100%;object-fit:cover" alt="">
         <div class="featured-card-label" id="pub-featured-label">Exclusive content</div>
       </a>
     </div>
+    <div id="pub-sec-grid" style="display:none"><div class="sec-heading" id="pub-sec-grid-txt"></div></div>
     <div class="cards-grid" id="pub-grid"></div>
+    <div id="pub-sec-btns" style="display:none"><div class="sec-heading" id="pub-sec-btns-txt"></div></div>
     <div class="btns-list" id="pub-btns"></div>
+    <div id="pub-sec-video" style="display:none"><div class="sec-heading" id="pub-sec-video-txt"></div></div>
     <div class="section-block" id="pub-video-wrap" style="display:none">
       <video id="pub-video" autoplay muted loop playsinline></video>
     </div>
+    <div id="pub-sec-gallery" style="display:none"><div class="sec-heading" id="pub-sec-gallery-txt"></div></div>
     <div id="pub-gallery-wrap" style="display:none">
       <div class="gallery-grid" id="pub-gallery"></div>
     </div>
   </div>
   <div class="pub-footer"></div>
+</div>
+
+<!-- ═══════ STATS ═══════ -->
+<div id="stats" style="display:none">
+  <div class="stats-wrap">
+    <button class="stats-back" onclick="showPub()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to page
+    </button>
+    <div class="stats-top">
+      <div class="stats-title">📊 Statistics</div>
+      <button class="stat-reset" onclick="resetStats()">Reset all</button>
+    </div>
+    <div class="stat-grid" id="stat-grid"></div>
+    <div class="stat-info">Stats are stored locally in your browser. They reset if you clear browser data.</div>
+  </div>
 </div>
 
 <!-- ═══════ LOGIN ═══════ -->
@@ -322,8 +374,8 @@ textarea.inp{resize:vertical;min-height:64px}
       <img class="ipreview sq" id="a-av-prev" style="margin-top:8px">
     </div>
     <div class="fl">
-      <label class="lbl">Баннер (шапка) <span class="hint">— 1080×1350 px (4:5), JPG/PNG</span></label>
-      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-bn-prev','d_banner',1200,false,0.75)"></label>
+      <label class="lbl">Баннер (шапка) <span class="hint">— любой размер, лучше 4:5</span></label>
+      <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить баннер<input type="file" accept="image/*" style="display:none" onchange="loadBanner(this)"></label>
       <img class="ipreview banner" id="a-bn-prev">
     </div>
   </div>
@@ -348,6 +400,37 @@ textarea.inp{resize:vertical;min-height:64px}
       <label class="upbtn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m4-5l5-5 5 5m-5-5v12"/></svg>Загрузить обложку<input type="file" accept="image/*" style="display:none" onchange="loadImg(this,'a-feat-prev','d_featured',1200,false,1.78)"></label>
       <img class="ipreview featured" id="a-feat-prev">
     </div>
+  </div>
+
+  <!-- Заголовки секций -->
+  <div class="acard">
+    <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h6"/></svg>Заголовки секций</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Пусто = заголовок скрыт. Включи тоглом и напиши текст.</div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Перед большой карточкой</div></div>
+      <label class="tog"><input type="checkbox" id="sh-feat-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="fl" style="margin-top:8px"><input class="inp" id="sh-feat-txt" placeholder="✦ Exclusive"></div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Перед карточками-сеткой</div></div>
+      <label class="tog"><input type="checkbox" id="sh-grid-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="fl" style="margin-top:8px"><input class="inp" id="sh-grid-txt" placeholder="✦ My Socials"></div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Перед кнопками</div></div>
+      <label class="tog"><input type="checkbox" id="sh-btns-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="fl" style="margin-top:8px"><input class="inp" id="sh-btns-txt" placeholder="✦ Links"></div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Перед видео</div></div>
+      <label class="tog"><input type="checkbox" id="sh-vid-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="fl" style="margin-top:8px"><input class="inp" id="sh-vid-txt" placeholder="✦ Watch"></div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Перед галереей</div></div>
+      <label class="tog"><input type="checkbox" id="sh-gal-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="fl" style="margin-top:8px"><input class="inp" id="sh-gal-txt" placeholder="✦ Gallery"></div>
   </div>
 
   <!-- Grid cards -->
@@ -387,6 +470,32 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="gal-mgr" id="a-gal-mgr"><button class="gal-add" onclick="addGalPhoto()"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14m-7-7h14"/></svg></button></div>
   </div>
 
+  <!-- Заголовки секций -->
+  <div class="acard">
+    <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h14"/></svg>Заголовки секций</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Текстовый заголовок над каждым блоком. Включи и напиши текст — появится над блоком на сайте.</div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Над большой карточкой</div><input class="inp" id="a-sh-feat-txt" placeholder="Featured" style="margin-top:6px"></div>
+      <label class="tog" style="margin-left:12px"><input type="checkbox" id="a-sh-feat-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Над карточками-сеткой</div><input class="inp" id="a-sh-grid-txt" placeholder="My Socials" style="margin-top:6px"></div>
+      <label class="tog" style="margin-left:12px"><input type="checkbox" id="a-sh-grid-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Над кнопками-ссылками</div><input class="inp" id="a-sh-btns-txt" placeholder="Links" style="margin-top:6px"></div>
+      <label class="tog" style="margin-left:12px"><input type="checkbox" id="a-sh-btns-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="trow">
+      <div class="trow-l"><div class="trow-title">Над видео</div><input class="inp" id="a-sh-vid-txt" placeholder="Watch" style="margin-top:6px"></div>
+      <label class="tog" style="margin-left:12px"><input type="checkbox" id="a-sh-vid-on"><span class="tog-sl"></span></label>
+    </div>
+    <div class="trow" style="border-bottom:none">
+      <div class="trow-l"><div class="trow-title">Над галереей</div><input class="inp" id="a-sh-gal-txt" placeholder="Gallery" style="margin-top:6px"></div>
+      <label class="tog" style="margin-left:12px"><input type="checkbox" id="a-sh-gal-on"><span class="tog-sl"></span></label>
+    </div>
+  </div>
+
   <!-- Прочее -->
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 18v2m10-10h-2M4 12H2m15.07-7.07-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>Прочее</div>
@@ -419,7 +528,11 @@ textarea.inp{resize:vertical;min-height:64px}
 </div>
 
 <div class="lightbox" id="lb" onclick="closeLb()"><button class="lb-close">✕</button><img id="lb-img" src="" alt=""></div>
-<button class="admin-fab" id="admin-fab" title="Открыть настройки" onclick="showPage('adm');loadAdm()">⚙️</button>
+<div style="position:fixed;bottom:20px;right:16px;z-index:200;display:none;flex-direction:column;gap:8px;align-items:center" id="admin-fabs">
+  <button class="admin-fab" style="display:flex" title="Statistics" onclick="showStats()">📊</button>
+  <button class="admin-fab" style="display:flex" title="Settings" onclick="showPage('adm');loadAdm()">⚙️</button>
+</div>
+<button class="admin-fab" id="admin-fab" style="display:none" title="Settings" onclick="showPage('adm');loadAdm()">⚙️</button>
 <div class="toast" id="toast"></div>
 <input type="file" accept="image/*" id="gal-fi" style="display:none" onchange="handleGalPhoto(this)">
 
@@ -443,12 +556,17 @@ const JSONBIN = 'https://api.jsonbin.io/v3';
 let C = null; // текущая конфигурация
 
 const DEF = {
-  name:'Your Name',handle:'@yourhandle',bio:'Описание профиля',
+  name:'Your Name',handle:'@yourhandle',bio:'',
   tagline:'',followers:'',badge:false,
   tabTitle:'My Link',
   d_avatar:'',d_banner:'',d_featured:'',
   featOn:false,featLabel:'Exclusive content',featUrl:'#',
   videoOn:false,videoUrl:'',galOn:false,
+  secFeatOn:false,secFeatTxt:'Featured',
+  secGridOn:false,secGridTxt:'My Socials',
+  secBtnsOn:false,secBtnsTxt:'Links',
+  secVideoOn:false,secVideoTxt:'Watch',
+  secGalOn:false,secGalTxt:'Gallery',
   socials:[],gridCards:[],buttons:[],gallery:[]
 };
 
@@ -457,12 +575,10 @@ function $(id){ return document.getElementById(id); }
 function showEl(id){ $(id).style.display='block'; }
 function hideEl(id){ $(id).style.display='none'; }
 function showPage(id){
-  ['pub','lgn','adm','setup'].forEach(x=>hideEl(x));
-  const el = $(id);
-  // lgn и setup должны быть flex для центрирования
-  el.style.display = (id==='lgn'||id==='setup') ? 'flex' : 'block';
-  // скрываем FAB если ушли со страницы pub
-  if(id !== 'pub') $('admin-fab').style.display='none';
+  ['pub','lgn','adm','setup','stats'].forEach(x=>{ const el=$(x); if(el) el.style.display='none'; });
+  const el=$(id); if(!el) return;
+  el.style.display = (id==='lgn'||id==='setup'||id==='stats') ? 'flex' : 'block';
+  if(id!=='pub'){ const f=$('admin-fabs'); if(f) f.style.display='none'; }
 }
 
 function showToast(msg, err=false){
@@ -550,7 +666,7 @@ async function doSetup(){
     await binSet(C);
     showToast('✓ Пароль установлен!');
     sessionStorage.setItem(SS_ADMIN, '1');
-    setTimeout(()=>{ renderPub(); showPage('pub'); $('admin-fab').style.display='flex'; }, 600);
+    setTimeout(()=>{ renderPub(); showPage('pub'); $('admin-fabs').style.display='flex'; }, 600);
   } catch(e){
     errEl.textContent = e.message;
     btn.disabled = false;
@@ -582,9 +698,19 @@ async function init(){
         showPage('lgn');
         $('pwd').focus();
       }
+    } else if(location.search.includes('stats')){
+      if(sessionStorage.getItem(SS_ADMIN)){
+        showPage('stats');
+        renderStats();
+      } else {
+        // reuse login page, redirect to stats after
+        showPage('lgn');
+        $('pwd').dataset.target='stats';
+        $('pwd').focus();
+      }
     } else {
       showPage('pub');
-      if(sessionStorage.getItem(SS_ADMIN)) $('admin-fab').style.display='flex';
+      if(sessionStorage.getItem(SS_ADMIN)) $('admin-fabs').style.display='flex';
     }
   } catch(e){
     spinner(false);
@@ -604,16 +730,56 @@ function login(){
   $('lgn-err').textContent='';
   const stored = localStorage.getItem(LS_PWD) || (C && C.pwd_hash) || null;
   if(stored && btoa(val) === stored){
-    // сохраняем на этом устройстве чтобы в следующий раз не смотреть в C
     localStorage.setItem(LS_PWD, stored);
     sessionStorage.setItem(SS_ADMIN, '1');
-    showPage('adm');
-    loadAdm();
+    const target = $('pwd').dataset.target || 'adm';
+    if(target === 'stats'){ showPage('stats'); renderStats(); }
+    else { showPage('adm'); loadAdm(); }
   } else {
-    $('lgn-err').textContent='Неверный пароль';
+    $('lgn-err').textContent='Incorrect password';
   }
 }
-function showPub(){ renderPub(); showPage('pub'); if(sessionStorage.getItem(SS_ADMIN)) $('admin-fab').style.display='flex'; }
+function showPub(){ renderPub(); showPage('pub'); if(sessionStorage.getItem(SS_ADMIN)) $('admin-fabs').style.display='flex'; }
+
+/* ====================== CLICK TRACKING ====================== */
+const STATS_KEY = 'tl_clicks';
+function trackClick(label){
+  try{
+    const d = JSON.parse(localStorage.getItem(STATS_KEY)||'{}');
+    d[label] = (d[label]||0) + 1;
+    d['__total'] = (d['__total']||0) + 1;
+    d['__last'] = new Date().toISOString();
+    localStorage.setItem(STATS_KEY, JSON.stringify(d));
+  }catch(e){}
+}
+function getStats(){ try{ return JSON.parse(localStorage.getItem(STATS_KEY)||'{}'); }catch(e){ return {}; } }
+function resetStats(){ if(confirm('Reset all stats?')){ localStorage.removeItem(STATS_KEY); renderStats(); } }
+
+/* ====================== STATS RENDER ====================== */
+function renderStats(){
+  const d = getStats();
+  const total = d['__total'] || 0;
+  const last = d['__last'] ? new Date(d['__last']).toLocaleDateString() : '—';
+  const visits = parseInt(localStorage.getItem('tl_visits')||'0');
+
+  const grid = $('stat-grid');
+  grid.innerHTML = `
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Total clicks</div></div>
+    <div class="stat-card"><div class="stat-num">${visits}</div><div class="stat-label">Page visits</div><div class="stat-sub">this browser</div></div>
+    <div class="stat-card full"><div class="stat-label">Last click</div><div style="font-size:16px;font-weight:700;margin-top:4px">${last}</div></div>
+  `;
+
+  const bars = $('stat-bars');
+  const entries = Object.entries(d).filter(([k])=>k!=='__total'&&k!=='__last').sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(!entries.length){ bars.innerHTML='<div style="font-size:13px;color:var(--text3);padding:8px 0">No clicks yet</div>'; return; }
+  const max = entries[0][1];
+  bars.innerHTML = entries.map(([k,v])=>`
+    <div class="stat-bar-row">
+      <div class="stat-bar-label" title="${k}">${k}</div>
+      <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${Math.round(v/max*100)}%"></div></div>
+      <div class="stat-bar-val">${v}</div>
+    </div>`).join('');
+}
 
 /* ====================== CROPPER ====================== */
 let _cropState = null;
@@ -765,6 +931,35 @@ async function confirmCrop(){
   } catch(e){
     showToast('Ошибка загрузки: ' + e.message, true);
   }
+}
+
+/* ====================== BANNER SMART LOAD ====================== */
+// Banner: if image is already ~4:5 ratio, skip cropper and upload directly
+async function loadBanner(inp){
+  if(!inp.files[0]) return;
+  const file = inp.files[0];
+  const img = new Image();
+  const url = URL.createObjectURL(file);
+  img.onload = async () => {
+    URL.revokeObjectURL(url);
+    const ratio = img.width / img.height;
+    const target = 0.75; // 4:5
+    const tolerance = 0.12;
+    if(Math.abs(ratio - target) < tolerance){
+      // Already correct ratio — upload directly, no cropper
+      showToast('Загружаем баннер...');
+      try{
+        const cloudUrl = await uploadToCloudinary(file, 'image');
+        C.d_banner = cloudUrl;
+        const p = $('a-bn-prev'); p.src = cloudUrl; p.style.display = 'block';
+        showToast('✓ Баннер загружен');
+      }catch(e){ showToast('Ошибка: '+e.message, true); }
+    } else {
+      // Wrong ratio — open cropper
+      openCropper(file, {maxW:1080, quality:0.92, circle:false, aspect:0.75, title:'Crop banner (4:5)', key:'d_banner', prevId:'a-bn-prev'});
+    }
+  };
+  img.src = url;
 }
 
 /* ====================== ЗАГРУЗКА ИЗОБРАЖЕНИЙ ====================== */
@@ -968,7 +1163,11 @@ async function handleGalPhoto(inp){
 function renderPub(){
   document.title = C.tabTitle || 'My Link';
 
-  // OG meta tags
+  // visit counter
+  const v = parseInt(localStorage.getItem('tl_visits')||'0');
+  localStorage.setItem('tl_visits', v+1);
+
+  // OG meta
   function setMeta(prop, content){
     let el = document.querySelector(`meta[property="${prop}"]`);
     if(!el){ el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
@@ -990,9 +1189,9 @@ function renderPub(){
   if(C.d_avatar){ ai.src = C.d_avatar; ai.style.display='block'; ap.style.display='none'; }
   else { ai.style.display='none'; ap.style.display='flex'; ap.textContent = (C.name||'AI').substring(0,2).toUpperCase(); }
 
-  $('pub-name').textContent = C.name || DEF.name;
-  $('pub-handle').textContent = C.handle || DEF.handle;
-  $('pub-bio').textContent = C.bio || DEF.bio;
+  $('pub-name').textContent = C.name || 'Your Name';
+  $('pub-handle').textContent = C.handle || '';
+  $('pub-bio').textContent = C.bio || '';
   $('pub-tagline').textContent = C.tagline || '';
   $('pub-badge').style.display = C.badge ? 'inline-flex' : 'none';
 
@@ -1004,16 +1203,26 @@ function renderPub(){
   const sr = $('pub-socials'); sr.innerHTML = '';
   (C.socials||[]).forEach(s=>{
     const a = document.createElement('a'); a.className='social-icon'; a.href=s.url||'#'; a.target='_blank'; a.rel='noopener';
+    a.onclick = () => trackClick(s.emoji || s.url || 'social');
     if(s.icon_data) a.innerHTML = `<img src="${s.icon_data}" alt="">`;
     else a.textContent = s.emoji || '🔗';
     sr.appendChild(a);
   });
 
+  // section heading helper
+  function showHeading(wrapId, txtId, on, txt){
+    const w=$(wrapId), t=$(txtId);
+    if(on && txt){ w.style.display='block'; t.textContent=txt; }
+    else w.style.display='none';
+  }
+
   // featured
+  showHeading('pub-sec-featured','pub-sec-featured-txt', C.secFeatOn, C.secFeatTxt);
   const fw = $('pub-featured-wrap');
   if(C.featOn){
     fw.style.display='block';
     $('pub-featured').href = C.featUrl || '#';
+    $('pub-featured').onclick = () => trackClick(C.featLabel || 'featured');
     $('pub-featured-label').textContent = C.featLabel || '';
     const fi = $('pub-featured-img'), fp = $('pub-featured-ph');
     if(C.d_featured){ fi.src = C.d_featured; fi.style.display='block'; fp.style.display='none'; }
@@ -1021,19 +1230,23 @@ function renderPub(){
   } else fw.style.display='none';
 
   // grid
+  showHeading('pub-sec-grid','pub-sec-grid-txt', C.secGridOn, C.secGridTxt);
   const pg = $('pub-grid'); pg.innerHTML = '';
   (C.gridCards||[]).slice(0,4).forEach(gc=>{
     const a = document.createElement('a'); a.className='grid-card'; a.href=gc.url||'#'; a.target='_blank'; a.rel='noopener';
-    let inner = gc.img_data ? `<img src="${gc.img_data}" alt="" loading="lazy">` : `<div class="grid-card-ph">Нет фото</div>`;
+    a.onclick = () => trackClick(gc.label || gc.url || 'card');
+    let inner = gc.img_data ? `<img src="${gc.img_data}" alt="" loading="lazy">` : `<div class="grid-card-ph">No image</div>`;
     if(gc.label) inner += `<div class="grid-card-label">${gc.label}</div>`;
     a.innerHTML = inner; pg.appendChild(a);
   });
   pg.style.display = (!C.gridCards || !C.gridCards.length) ? 'none' : 'grid';
 
   // buttons
+  showHeading('pub-sec-btns','pub-sec-btns-txt', C.secBtnsOn, C.secBtnsTxt);
   const pb = $('pub-btns'); pb.innerHTML = '';
   (C.buttons||[]).forEach(b=>{
     const a = document.createElement('a'); a.className='wide-btn'; a.href=b.url||'#'; a.target='_blank'; a.rel='noopener';
+    a.onclick = () => trackClick(b.title || b.url || 'button');
     let ico = '';
     if(b.icon_data) ico = `<div class="wide-btn-icon"><img src="${b.icon_data}" alt=""></div>`;
     else if(b.emoji) ico = `<div class="wide-btn-icon">${b.emoji}</div>`;
@@ -1042,14 +1255,16 @@ function renderPub(){
   });
 
   // video
+  showHeading('pub-sec-video','pub-sec-video-txt', C.secVideoOn, C.secVideoTxt);
   const vw = $('pub-video-wrap');
   if(C.videoOn && C.videoUrl){
     vw.style.display = 'block';
     const vid = $('pub-video');
-    vid.src = C.videoUrl;
+    if(vid.src !== C.videoUrl) vid.src = C.videoUrl;
   } else vw.style.display = 'none';
 
   // gallery
+  showHeading('pub-sec-gallery','pub-sec-gallery-txt', C.secGalOn, C.secGalTxt);
   const gw = $('pub-gallery-wrap');
   if(C.galOn && C.gallery && C.gallery.length){
     gw.style.display = 'block';
@@ -1057,7 +1272,7 @@ function renderPub(){
     C.gallery.forEach((src,i)=>{
       const d = document.createElement('div'); d.className='gal-item';
       d.innerHTML = `<img src="${src}" alt="photo ${i+1}" loading="lazy">`;
-      d.onclick = () => openLb(src);
+      d.onclick = () => { trackClick('gallery'); openLb(src); };
       gg.appendChild(d);
     });
   } else gw.style.display = 'none';
@@ -1082,6 +1297,13 @@ function loadAdm(){
   $('a-vid-url').value = C.videoUrl || '';
   $('a-gal-on').checked = !!C.galOn;
 
+  // section headings
+  $('a-sh-feat-on').checked = !!C.secFeatOn; $('a-sh-feat-txt').value = C.secFeatTxt||'Featured';
+  $('a-sh-grid-on').checked = !!C.secGridOn; $('a-sh-grid-txt').value = C.secGridTxt||'My Socials';
+  $('a-sh-btns-on').checked = !!C.secBtnsOn; $('a-sh-btns-txt').value = C.secBtnsTxt||'Links';
+  $('a-sh-vid-on').checked  = !!C.secVideoOn; $('a-sh-vid-txt').value  = C.secVideoTxt||'Watch';
+  $('a-sh-gal-on').checked  = !!C.secGalOn;  $('a-sh-gal-txt').value  = C.secGalTxt||'Gallery';
+
   if(C.d_avatar){ const e=$('a-av-prev'); e.src=C.d_avatar; e.style.display='block'; }
   if(C.d_banner){ const e=$('a-bn-prev'); e.src=C.d_banner; e.style.display='block'; }
   if(C.d_featured){ const e=$('a-feat-prev'); e.src=C.d_featured; e.style.display='block'; }
@@ -1096,8 +1318,8 @@ function loadAdm(){
 /* ====================== SAVE ====================== */
 async function saveAll(){
   C.name = $('a-name').value || DEF.name;
-  C.handle = $('a-handle').value || DEF.handle;
-  C.bio = $('a-bio').value || DEF.bio;
+  C.handle = $('a-handle').value || '';
+  C.bio = $('a-bio').value || '';
   C.tagline = $('a-tagline').value || '';
   C.followers = $('a-followers').value || '';
   C.badge = $('a-badge').checked;
@@ -1108,6 +1330,12 @@ async function saveAll(){
   C.videoOn = $('a-vid-on').checked;
   C.videoUrl = $('a-vid-url').value.trim();
   C.galOn = $('a-gal-on').checked;
+
+  C.secFeatOn = $('a-sh-feat-on').checked; C.secFeatTxt = $('a-sh-feat-txt').value.trim();
+  C.secGridOn = $('a-sh-grid-on').checked; C.secGridTxt = $('a-sh-grid-txt').value.trim();
+  C.secBtnsOn = $('a-sh-btns-on').checked; C.secBtnsTxt = $('a-sh-btns-txt').value.trim();
+  C.secVideoOn = $('a-sh-vid-on').checked; C.secVideoTxt = $('a-sh-vid-txt').value.trim();
+  C.secGalOn  = $('a-sh-gal-on').checked; C.secGalTxt  = $('a-sh-gal-txt').value.trim();
 
   const np = $('a-pwd').value.trim();
   if(np){
@@ -1130,6 +1358,77 @@ async function saveAll(){
     btn.disabled = false;
     btn.textContent = '💾 Сохранить изменения';
   }
+}
+
+/* ====================== STATS ====================== */
+const LS_STATS = 'tl_stats';
+
+function trackClick(label){
+  try{
+    const s = JSON.parse(localStorage.getItem(LS_STATS)||'{}');
+    s.clicks = (s.clicks||0)+1;
+    s.links = s.links||{};
+    s.links[label] = (s.links[label]||0)+1;
+    const today = new Date().toISOString().slice(0,10);
+    s.days = s.days||{};
+    s.days[today] = (s.days[today]||0)+1;
+    localStorage.setItem(LS_STATS, JSON.stringify(s));
+  }catch(e){}
+}
+
+function getStats(){
+  try{ return JSON.parse(localStorage.getItem(LS_STATS)||'{}'); }catch(e){ return {}; }
+}
+
+function renderStats(){
+  const s = getStats();
+  const visits = parseInt(localStorage.getItem('tl_visits')||'0');
+  const clicks = s.clicks||0;
+  const links = s.links||{};
+  const days = s.days||{};
+
+  // last 7 days visits from days log
+  const today = new Date();
+  let weekClicks = 0;
+  for(let i=0;i<7;i++){
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    weekClicks += days[d.toISOString().slice(0,10)]||0;
+  }
+
+  const sorted = Object.entries(links).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxClicks = sorted[0]?sorted[0][1]:1;
+
+  let html = `
+    <div class="stat-card"><div class="stat-num">${visits}</div><div class="stat-label">Page views</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-num">${clicks}</div><div class="stat-label">Link clicks</div><div class="stat-sub">all time</div></div>
+    <div class="stat-card"><div class="stat-num">${weekClicks}</div><div class="stat-label">Clicks this week</div><div class="stat-sub">last 7 days</div></div>
+    <div class="stat-card"><div class="stat-num">${clicks&&visits?Math.round(clicks/visits*100):0}%</div><div class="stat-label">Click rate</div><div class="stat-sub">clicks ÷ views</div></div>
+  `;
+
+  if(sorted.length){
+    let bars = sorted.map(([label,count])=>`
+      <div class="stat-bar-row">
+        <div class="stat-bar-label">${label}</div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${Math.round(count/maxClicks*100)}%"></div></div>
+        <div class="stat-bar-val">${count}</div>
+      </div>`).join('');
+    html += `<div class="stat-card full"><div class="stat-label" style="margin-bottom:10px">Top links</div><div class="stat-bar-wrap">${bars}</div></div>`;
+  }
+
+  $('stat-grid').innerHTML = html;
+}
+
+function resetStats(){
+  if(!confirm('Reset all statistics? This cannot be undone.')) return;
+  localStorage.removeItem(LS_STATS);
+  localStorage.removeItem('tl_visits');
+  renderStats();
+  showToast('Stats reset');
+}
+
+function showStats(){
+  renderStats();
+  showPage('stats');
 }
 
 /* ====================== BOOT ====================== */
