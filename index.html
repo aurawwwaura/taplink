@@ -547,8 +547,7 @@ const LS_PWD        = 'tl_pwd';
 const SS_ADMIN      = 'tl_admin_session';
 
 // ▼▼▼ ЗАШИТЫЕ ДАННЫЕ — менять только здесь ▼▼▼
-const HARD_GIST_ID    = '610b09fe3b9ed7de9bd703d0e6aefaab'; // GitHub Gist ID
-const HARD_GIST_TOKEN = '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'; // GitHub Personal Access Token (gist scope)
+const WORKER_URL      = 'https://taplink-gist.aurawwwaura.workers.dev'; // Cloudflare Worker URL
 const HARD_CLOUD      = 'do7yxqdcr';
 const HARD_PRESET     = 'taplink';
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
@@ -621,34 +620,22 @@ function dataURLtoFile(dataurl, filename) {
   return new File([u8arr], filename, {type: mime});
 }
 
-/* ====================== GITHUB GIST ====================== */
+/* ====================== STORAGE via Cloudflare Worker ====================== */
 async function binGet(){
-  const r = await fetch(`https://api.github.com/gists/${HARD_GIST_ID}`, {
-    headers: {
-      'Authorization': `token ${HARD_GIST_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json'
-    }
-  });
-  if(!r.ok) throw new Error('Gist read error ' + r.status);
-  const gist = await r.json();
-  const content = gist.files['data.json'] && gist.files['data.json'].content;
-  if(!content) return {};
-  try { return JSON.parse(content); } catch(e) { return {}; }
+  const r = await fetch(WORKER_URL, { method: 'GET' });
+  if(!r.ok) throw new Error('Worker read error ' + r.status);
+  return await r.json();
 }
 
 async function binSet(data){
   const body = JSON.stringify(data);
   if (body.length > 480000) throw new Error('Данные слишком большие. Убери пару фото из галереи.');
-  const r = await fetch(`https://api.github.com/gists/${HARD_GIST_ID}`, {
+  const r = await fetch(WORKER_URL, {
     method: 'PATCH',
-    headers: {
-      'Authorization': `token ${HARD_GIST_TOKEN}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ files: { 'data.json': { content: body } } })
+    headers: { 'Content-Type': 'application/json' },
+    body
   });
-  if(!r.ok) throw new Error('Error save: ' + r.status);
+  if(!r.ok) throw new Error('Ошибка сохранения: ' + r.status);
   return await r.json();
 }
 
@@ -744,7 +731,7 @@ async function init(){
     }
   } catch(e){
     spinner(false);
-    showToast('⚠️ Error loading', true);
+    showToast('⚠️ Ошибка загрузки', true);
     C = Object.assign({}, DEF);
     renderPub();
     showPage('pub');
