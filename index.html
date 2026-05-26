@@ -548,7 +548,7 @@ const SS_ADMIN      = 'tl_admin_session';
 
 // ▼▼▼ ЗАШИТЫЕ ДАННЫЕ — менять только здесь ▼▼▼
 const HARD_GIST_ID    = '610b09fe3b9ed7de9bd703d0e6aefaab'; // GitHub Gist ID
-const HARD_GIST_TOKEN = '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'; // GitHub Personal Access Token (gist scope)
+const HARD_GIST_TOKEN = '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'; // GitHub Personal Access Token (gist scope)
 const HARD_CLOUD      = 'do7yxqdcr';
 const HARD_PRESET     = 'taplink';
 // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
@@ -648,7 +648,7 @@ async function binSet(data){
     },
     body: JSON.stringify({ files: { 'data.json': { content: body } } })
   });
-  if(!r.ok) throw new Error('Ошибка сохранения: ' + r.status);
+  if(!r.ok) throw new Error('Error save: ' + r.status);
   return await r.json();
 }
 
@@ -744,7 +744,7 @@ async function init(){
     }
   } catch(e){
     spinner(false);
-    showToast('⚠️ Ошибка загрузки', true);
+    showToast('⚠️ Error loading', true);
     C = Object.assign({}, DEF);
     renderPub();
     showPage('pub');
