@@ -341,10 +341,13 @@ textarea.inp{resize:vertical;min-height:64px}
 
 <!-- ═══════ ADMIN ═══════ -->
 <div id="adm" style="display:none">
-  <button class="adm-back" onclick="showPub()">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+  <button class="adm-back" style="margin-bottom:0" onclick="showPub()">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     На страницу
   </button>
+  <button onclick="logout()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Inter',sans-serif;padding:6px 12px;cursor:pointer">Выйти</button>
+</div>
   <div class="adm-top">
     <div class="adm-title">Настройки</div>
     <div class="adm-badge">Admin</div>
@@ -692,7 +695,7 @@ async function login(){
 }
 
 function showPub(){
-  renderPub();
+  if(C) renderPub();
   showPage('pub');
   if(SESSION_TOKEN) $('admin-fabs').style.display='flex';
 }
@@ -990,6 +993,7 @@ async function handleGalPhoto(inp){
 
 /* ═══════ PUBLIC RENDER ═══════ */
 function renderPub(){
+  if(!C) return; // защита от вызова до загрузки данных
   document.title = C.tabTitle||'My Link';
   const v=parseInt(localStorage.getItem('tl_visits')||'0');
   localStorage.setItem('tl_visits',v+1);
@@ -1194,6 +1198,15 @@ function resetStats(){
   renderStats(); showToast('Stats reset');
 }
 function showStats(){ renderStats(); showPage('stats'); }
+
+/* ═══════ LOGOUT ═══════ */
+function logout(){
+  SESSION_TOKEN = '';
+  sessionStorage.removeItem('tl_token');
+  showPage('lgn');
+  $('pwd').value = '';
+  $('pwd').focus();
+}
 
 /* ═══════ BOOT ═══════ */
 init();
