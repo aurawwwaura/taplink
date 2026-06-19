@@ -332,7 +332,7 @@ textarea.inp{resize:vertical;min-height:64px}
     <div class="lgn-ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
     <div class="lgn-title">Admin Panel</div>
     <div class="lgn-sub">Enter your password to continue</div>
-    <input type="password" class="inp" id="pwd" placeholder="Password…" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" class="inp" id="pwd" placeholder="Password…" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
     <div class="lgn-err" id="lgn-err"></div>
     <div style="height:10px"></div>
     <button class="save-btn" onclick="login()">Sign In</button>
@@ -341,13 +341,10 @@ textarea.inp{resize:vertical;min-height:64px}
 
 <!-- ═══════ ADMIN ═══════ -->
 <div id="adm" style="display:none">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-  <button class="adm-back" style="margin-bottom:0" onclick="showPub()">
+  <button class="adm-back" onclick="showPub()">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
     На страницу
   </button>
-  <button onclick="logout()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text3);font-size:12px;font-family:'Inter',sans-serif;padding:6px 12px;cursor:pointer">Выйти</button>
-</div>
   <div class="adm-top">
     <div class="adm-title">Настройки</div>
     <div class="adm-badge">Admin</div>
@@ -465,7 +462,7 @@ textarea.inp{resize:vertical;min-height:64px}
   <div class="acard">
     <div class="acard-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 18v2m10-10h-2M4 12H2m15.07-7.07-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41"/></svg>Прочее</div>
     <div class="fl"><label class="lbl">Заголовок вкладки браузера</label><input class="inp" id="a-tab" placeholder="My Link"></div>
-    <div class="fl"><label class="lbl">Сменить пароль <span class="hint">(оставьте пустым, чтобы не менять)</span></label><input type="password" class="inp" id="a-pwd" placeholder="Новый пароль…"></div>
+    <div class="fl"><label class="lbl">Сменить пароль <span class="hint">(оставьте пустым, чтобы не менять)</span></label><input type="password" class="inp" id="a-pwd" placeholder="Новый пароль…" autocomplete="new-password"></div>
   </div>
 
   <button class="save-btn" id="save-btn" onclick="saveAll()">💾 Сохранить изменения</button>
@@ -695,7 +692,7 @@ async function login(){
 }
 
 function showPub(){
-  if(C) renderPub();
+  renderPub();
   showPage('pub');
   if(SESSION_TOKEN) $('admin-fabs').style.display='flex';
 }
@@ -795,19 +792,21 @@ async function confirmCrop(){
   let outW=parseFloat(maskEl.style.width), outH=parseFloat(maskEl.style.height);
   const srcX=(maskX-s.ox)/sc, srcY=(maskY-s.oy)/sc;
   const srcW=outW/sc, srcH=outH/sc;
-  const canvasW=Math.round(Math.min(s.maxW,srcW));
+  // Жёсткий лимит canvas — не больше 800px чтобы не было stack overflow
+  const canvasW=Math.round(Math.min(s.maxW, srcW, 800));
   const canvasH=Math.round(canvasW*(srcH/srcW));
   const canvas=document.createElement('canvas');
   canvas.width=canvasW; canvas.height=canvasH;
   const ctx=canvas.getContext('2d');
   if(s.circle){ ctx.beginPath(); ctx.arc(canvas.width/2,canvas.height/2,canvas.width/2,0,Math.PI*2); ctx.clip(); }
   ctx.drawImage($('crop-img'),srcX,srcY,srcW,srcH,0,0,canvas.width,canvas.height);
-  const resultDataUrl = canvas.toDataURL('image/jpeg', s.quality);
   closeCropper();
 
   try{
     showToast('Загружаем...');
-    const file = dataURLtoFile(resultDataUrl, 'cropped.jpg');
+    // Используем toBlob вместо toDataURL — не вызывает stack overflow
+    const blob = await new Promise((res,rej) => canvas.toBlob(b => b?res(b):rej(new Error('Canvas error')), 'image/jpeg', s.quality));
+    const file = new File([blob], 'cropped.jpg', {type:'image/jpeg'});
     const url = await uploadFile(file, 'image');
     C[s.key] = url;
     const p=$(s.prevId); if(p){ p.src=url; p.style.display='block'; }
@@ -815,33 +814,71 @@ async function confirmCrop(){
   } catch(e){ showToast('Ошибка: '+e.message, true); }
 }
 
+/* ═══════ IMAGE RESIZE HELPER ═══════ */
+// Ресайзит любое изображение до maxW/maxH через canvas — без кроппера
+function resizeImage(file, maxW, maxH, quality=0.88){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      try {
+        let w = img.naturalWidth, h = img.naturalHeight;
+        // Ресайзим только если больше лимита
+        if(w > maxW || h > maxH){
+          const scale = Math.min(maxW/w, maxH/h);
+          w = Math.round(w * scale);
+          h = Math.round(h * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        canvas.toBlob(blob => {
+          if(!blob) return reject(new Error('Canvas error'));
+          resolve(new File([blob], 'image.jpg', {type:'image/jpeg'}));
+        }, 'image/jpeg', quality);
+      } catch(e) { reject(e); }
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Image load failed')); };
+    img.src = url;
+  });
+}
+
 /* ═══════ BANNER ═══════ */
 async function loadBanner(inp){
   if(!inp.files[0]) return;
-  const file = inp.files[0];
-  const img = new Image(), url = URL.createObjectURL(file);
-  img.onload = async () => {
-    URL.revokeObjectURL(url);
-    const ratio = img.width / img.height;
-    if(Math.abs(ratio - 16/9) < 0.15){
-      showToast('Загружаем баннер...');
-      try{
-        const cloudUrl = await uploadFile(file, 'image');
-        C.d_banner = cloudUrl;
-        const p=$('a-bn-prev'); p.src=cloudUrl; p.style.display='block';
-        showToast('✓ Баннер загружен');
-      }catch(e){ showToast('Ошибка: '+e.message, true); }
-    } else {
-      openCropper(file, {maxW:1920,quality:0.92,circle:false,aspect:16/9,title:'Crop banner (16:9)',key:'d_banner',prevId:'a-bn-prev'});
-    }
-  };
-  img.src = url;
+  showToast('Загружаем баннер...');
+  try{
+    const resized = await resizeImage(inp.files[0], 1920, 1080, 0.88);
+    const url = await uploadFile(resized, 'image');
+    C.d_banner = url;
+    const p=$('a-bn-prev'); p.src=url; p.style.display='block';
+    showToast('✓ Баннер загружен');
+  } catch(e){ showToast('Ошибка: '+e.message, true); }
+  inp.value='';
 }
 
-function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
+/* ═══════ LOAD IMG (аватар, featured, карточки) ═══════ */
+async function loadImg(inp, prevId, key, maxW=800, circle=false, aspect=1){
   if(!inp.files[0]) return;
-  const title = key==='d_avatar'?'Crop avatar':key==='d_banner'?'Crop banner':'Crop image';
-  openCropper(inp.files[0], {maxW, quality:0.95, circle, aspect, title, key, prevId});
+  // Для аватара используем кроппер (нужен круг)
+  // Для остальных — просто ресайзим и загружаем
+  if(circle){
+    openCropper(inp.files[0], {maxW, quality:0.90, circle, aspect,
+      title:'Crop avatar', key, prevId});
+  } else {
+    showToast('Загружаем...');
+    try{
+      const maxH = Math.round(maxW / aspect);
+      const resized = await resizeImage(inp.files[0], maxW, maxH, 0.88);
+      const url = await uploadFile(resized, 'image');
+      C[key] = url;
+      const p=$(prevId); if(p){ p.src=url; p.style.display='block'; }
+      showToast('✓ Загружено');
+    } catch(e){ showToast('Ошибка: '+e.message, true); }
+    inp.value='';
+  }
 }
 
 /* ═══════ SOCIALS ═══════ */
@@ -993,7 +1030,6 @@ async function handleGalPhoto(inp){
 
 /* ═══════ PUBLIC RENDER ═══════ */
 function renderPub(){
-  if(!C) return; // защита от вызова до загрузки данных
   document.title = C.tabTitle||'My Link';
   const v=parseInt(localStorage.getItem('tl_visits')||'0');
   localStorage.setItem('tl_visits',v+1);
@@ -1198,15 +1234,6 @@ function resetStats(){
   renderStats(); showToast('Stats reset');
 }
 function showStats(){ renderStats(); showPage('stats'); }
-
-/* ═══════ LOGOUT ═══════ */
-function logout(){
-  SESSION_TOKEN = '';
-  sessionStorage.removeItem('tl_token');
-  showPage('lgn');
-  $('pwd').value = '';
-  $('pwd').focus();
-}
 
 /* ═══════ BOOT ═══════ */
 init();
