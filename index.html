@@ -233,6 +233,7 @@ textarea.inp{resize:vertical;min-height:64px}
   .gal-mgr{grid-template-columns:repeat(3,1fr)}
 }
 </style>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="4fd54c28-869e-4a5d-9e2c-f92b217a1f91"></script>
 </head>
 <body>
 
@@ -1201,12 +1202,7 @@ async function saveAll(){
 /* ═══════ STATS ═══════ */
 const LS_STATS='tl_stats';
 function trackClick(label){
-  try{
-    const s=JSON.parse(localStorage.getItem(LS_STATS)||'{}');
-    s.clicks=(s.clicks||0)+1; s.links=s.links||{}; s.links[label]=(s.links[label]||0)+1;
-    const today=new Date().toISOString().slice(0,10); s.days=s.days||{}; s.days[today]=(s.days[today]||0)+1;
-    localStorage.setItem(LS_STATS,JSON.stringify(s));
-  }catch(e){}
+  try{ if(window.umami) window.umami.track(label); }catch(e){}
 }
 function getStats(){ try{ return JSON.parse(localStorage.getItem(LS_STATS)||'{}'); }catch(e){ return {}; } }
 function renderStats(){
